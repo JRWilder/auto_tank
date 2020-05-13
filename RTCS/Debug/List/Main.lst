@@ -1,0 +1,331 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           21/Dec/2019  16:31:23
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\src\Main.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EWD5CA.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\src\Main.c" -lC
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\Debug\List\Main.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Refreshed\Debug\Obj\Main.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Refreshed\src\Main.c
+      1          //******************************************************************************
+      2          // File Name: Main.c
+      3          // Description: This file contains the Main Routine - "While" Operating System
+      4          // Author: Johnathan Wilder
+      5          // Date: May 2019
+      6          // Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      7          //******************************************************************************
+      8          
+      9          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x130
+   \   union <unnamed> _A_PM5CTL0_L
+   \                     _A_PM5CTL0_L:
+   \   000000                DS8 2
+     10          #include "Functions.h"
+     11          #include "Macros.h"
+     12          #include <string.h>
+     13          
+     14          ///////////////////////// Operations /////////////////////////
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile unsigned int v_thumb = ZERO;//Sets the current value read from the thumb wheel to zero
+   \                     v_thumb:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     16          volatile unsigned int old_v_thumb = HIGH;//Sets the old value read from the thumb wheel to zero
+   \                     old_v_thumb:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for old_v_thumb>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     17          volatile char run_operation = LOW;//Sets the va
+   \                     run_operation:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for run_operation>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          volatile unsigned int operation = ZERO;
+   \                     operation:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          volatile unsigned int operation_state = ZERO;
+   \                     operation_state:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          volatile unsigned int old_operation_state = ZERO;
+   \                     old_operation_state:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     21          volatile char run_display = LOW;
+   \                     run_display:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for run_display>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     22          volatile char reset_op = LOW;
+   \                     reset_op:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for reset_op>`
+     23          
+
+   \                                 In  segment CODE, align 2
+     24          void main(void){
+   \                     main:
+     25          //------------------------------------------------------------------------------
+     26          // Main Program
+     27          // This is the main routine for the program. Execution of code starts here.
+     28          // The operating system is Back Ground Fore Ground.
+     29          //
+     30          //------------------------------------------------------------------------------
+     31          // Disable the GPIO power-on default high-impedance mode to activate
+     32          // previously configured port settings
+     33            PM5CTL0 &= ~LOCKLPM5;
+   \   000000   92C33001     BIC.W   #0x1, &0x130
+     34          	Init_Ports();// Initialize Ports
+   \   000004   ........     CALLA   #Init_Ports
+     35          	Init_Clocks();// Initialize Clock System
+   \   000008   ........     CALLA   #Init_Clocks
+     36          	Init_Conditions();// Initialize Variables and Initial Conditions
+   \   00000C   ........     CALLA   #Init_Conditions
+     37          	Init_Timers();// Initialize Timers
+   \   000010   ........     CALLA   #Init_Timers
+     38          	Init_LCD();// Initialize LCD
+   \   000014   ........     CALLA   #Init_LCD
+     39          	Init_ADC();// Initialize Analog to Digital Converter
+   \   000018   ........     CALLA   #Init_ADC
+     40          	Init_Serial();// Initialize serial ports
+   \   00001C   ........     CALLA   #Init_Serial
+     41          	enable_interrupts();
+   \   000020   ........     CALLA   #enable_interrupts
+     42          
+     43          	while(ONE){// Can the Operating system run
+     44          		if(run_operation == HIGH){// If an operation is ready to run, continue
+   \                     ??main_0:
+   \   000024   F2904800.... CMP.B   #0x48, &run_operation
+   \   00002A   4320         JNE     ??main_4
+     45          			if(reset_op != HIGH){// If reset is not ready, continue
+   \   00002C   F2904800.... CMP.B   #0x48, &reset_op
+   \   000032   3624         JEQ     ??main_5
+     46          				if(run_display != HIGH){
+   \   000034   F2904800.... CMP.B   #0x48, &run_display
+   \   00003A   0724         JEQ     ??main_6
+     47          					run_display = HIGH;
+   \   00003C   F2404800.... MOV.B   #0x48, &run_display
+     48          					displays(v_thumb);
+   \   000042   1C42....     MOV.W   &v_thumb, R12
+   \   000046   ........     CALLA   #displays
+     49          				}
+     50          				if(operation_state != old_operation_state){
+                 				^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is undefined
+          in this statement
+   \                     ??main_6:
+   \   00004A   1F42....     MOV.W   &operation_state, R15
+   \   00004E   1F92....     CMP.W   &old_operation_state, R15
+   \   000052   0724         JEQ     ??main_7
+     51          					old_operation_state = operation_state;
+   \   000054   9242........ MOV.W   &operation_state, &old_operation_state
+     52          					displays(operation);
+   \   00005A   1C42....     MOV.W   &operation, R12
+   \   00005E   ........     CALLA   #displays
+     53          				}
+     54          				switch(operation){
+   \                     ??main_7:
+   \   000062   1F42....     MOV.W   &operation, R15
+   \   000066   2F83         SUB.W   #0x2, R15
+   \   000068   1624         JEQ     ??main_8
+   \   00006A   1F83         SUB.W   #0x1, R15
+   \   00006C   1124         JEQ     ??main_9
+   \   00006E   1F83         SUB.W   #0x1, R15
+   \   000070   0C24         JEQ     ??main_10
+   \   000072   1F83         SUB.W   #0x1, R15
+   \   000074   0724         JEQ     ??main_11
+   \   000076   1F83         SUB.W   #0x1, R15
+   \   000078   0224         JEQ     ??main_12
+   \   00007A   1F83         SUB.W   #0x1, R15
+   \   00007C   263C         JMP     ??main_2
+     55          					case SEVEN://Normal
+     56          						break;
+     57          					case SIX://Calibration
+     58          						calibration();
+   \                     ??main_12:
+   \   00007E   ........     CALLA   #calibration
+     59          						break;
+   \   000082   233C         JMP     ??main_2
+     60          					case FIVE://Line Follow
+     61          						line_follow();
+   \                     ??main_11:
+   \   000084   ........     CALLA   #line_follow
+     62          						break;
+   \   000088   203C         JMP     ??main_2
+     63          					case FOUR://Serial Communications
+     64          						serial_com();
+   \                     ??main_10:
+   \   00008A   ........     CALLA   #serial_com
+     65          						break;
+   \   00008E   1D3C         JMP     ??main_2
+     66          					case THREE://WiFi Communications
+     67          						wifi_com();
+   \                     ??main_9:
+   \   000090   ........     CALLA   #wifi_com
+     68          						break;
+   \   000094   1A3C         JMP     ??main_2
+     69          					case TWO://Pulse Width Modulation (PWM)
+     70          						pwm(operation_state);
+   \                     ??main_8:
+   \   000096   1C42....     MOV.W   &operation_state, R12
+   \   00009A   ........     CALLA   #pwm
+     71          						break;
+   \   00009E   153C         JMP     ??main_2
+     72          					default: break;
+     73          				}
+     74          			}else{
+     75          				reset(operation);
+   \                     ??main_5:
+   \   0000A0   1C42....     MOV.W   &operation, R12
+   \   0000A4   ........     CALLA   #reset
+     76          				displays(v_thumb);
+   \   0000A8   1C42....     MOV.W   &v_thumb, R12
+   \   0000AC   ........     CALLA   #displays
+   \   0000B0   0C3C         JMP     ??main_2
+     77          			}
+     78          		}else{
+     79          			if(v_thumb != old_v_thumb){
+                 			^
+Warning[Pa082]: undefined behavior: the order of volatile accesses is undefined
+          in this statement
+   \                     ??main_4:
+   \   0000B2   1F42....     MOV.W   &v_thumb, R15
+   \   0000B6   1F92....     CMP.W   &old_v_thumb, R15
+   \   0000BA   0724         JEQ     ??main_2
+     80          				old_v_thumb = v_thumb;
+   \   0000BC   9242........ MOV.W   &v_thumb, &old_v_thumb
+     81          				displays(v_thumb);
+   \   0000C2   1C42....     MOV.W   &v_thumb, R12
+   \   0000C6   ........     CALLA   #displays
+     82          			}
+     83          		}
+     84          		Display_Process();
+   \                     ??main_2:
+   \   0000CA   ........     CALLA   #Display_Process
+   \   0000CE   AA3F         JMP     ??main_0
+   \   0000D0   0343         NOP
+   \   0000D2                REQUIRE _A_PM5CTL0_L
+     85          	}
+     86          }
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for old_v_thumb>`:
+   \   000000   4800         DC16 72
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for run_operation>`:
+   \   000000   4C           DC8 76
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for run_display>`:
+   \   000000   4C           DC8 76
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for reset_op>`:
+   \   000000   4C           DC8 76
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> Display_Process
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_Ports
+        4   -> Init_Serial
+        4   -> Init_Timers
+        4   -> calibration
+        4   -> displays
+        4   -> enable_interrupts
+        4   -> line_follow
+        4   -> pwm
+        4   -> reset
+        4   -> serial_com
+        4   -> wifi_com
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  ?<Initializer for old_v_thumb>
+       1  ?<Initializer for reset_op>
+       1  ?<Initializer for run_display>
+       1  ?<Initializer for run_operation>
+       2  _A_PM5CTL0_L
+     210  main
+       2  old_operation_state
+       2  old_v_thumb
+       2  operation
+       2  operation_state
+       1  reset_op
+       1  run_display
+       1  run_operation
+       2  v_thumb
+
+ 
+ 210 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+   5 bytes in segment DATA16_I
+   5 bytes in segment DATA16_ID
+   8 bytes in segment DATA16_Z
+ 
+ 210 bytes of CODE  memory
+   5 bytes of CONST memory
+  13 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: 2

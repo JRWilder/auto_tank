@@ -1,0 +1,223 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           17/Aug/2019  12:07:33
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\HEXtoBCD.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EWF1AF.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\HEXtoBCD.c" -lC
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\HEXtoBCD.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\HEXtoBCD.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\HEXtoBCD.c
+      1          #include "msp430.h"
+      2          #include "Functions.h"
+      3          #include "Macros.h"
+      4          
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+      5          char adc_char[ELEVEN] = {' ',' ',' ',' ',' ', ' ',' ',' ',' ',' ',0};
+   \                     adc_char:
+   \   000000                DS8 11
+   \   00000B                REQUIRE `?<Initializer for adc_char>`
+      6          
+      7          
+
+   \                                 In  segment CODE, align 2
+      8          void HEXtoBCD(unsigned int v_detect_left_hex, unsigned int v_detect_right_hex){
+   \                     HEXtoBCD:
+      9          	int value = ZERO;
+   \   000000   0F43         MOV.W   #0x0, R15
+     10          
+     11          	while (v_detect_left_hex > 999){
+   \                     ??HEXtoBCD_0:
+   \   000002   3C90E803     CMP.W   #0x3e8, R12
+   \   000006   0428         JNC     ??HEXtoBCD_6
+     12          		v_detect_left_hex = v_detect_left_hex - 1000;
+   \   000008   3C5018FC     ADD.W   #0xfc18, R12
+     13          		value++;
+   \   00000C   1F53         ADD.W   #0x1, R15
+   \   00000E   F93F         JMP     ??HEXtoBCD_0
+     14          	}
+     15          	adc_char[ZERO] = 0x30 + value;
+   \                     ??HEXtoBCD_6:
+   \   000010   0E12         PUSH.W  R14
+   \   000012   C14F0000     MOV.B   R15, 0(SP)
+   \   000016   3E41         POP.W   R14
+   \   000018   7E503000     ADD.B   #0x30, R14
+   \   00001C   C24E....     MOV.B   R14, &adc_char
+     16          	value = ZERO;
+   \   000020   0F43         MOV.W   #0x0, R15
+     17          
+     18          	while (v_detect_left_hex > 99){
+   \                     ??HEXtoBCD_1:
+   \   000022   3C906400     CMP.W   #0x64, R12
+   \   000026   0428         JNC     ??HEXtoBCD_7
+     19          		v_detect_left_hex = v_detect_left_hex - 100;
+   \   000028   3C509CFF     ADD.W   #0xff9c, R12
+     20          		value++;
+   \   00002C   1F53         ADD.W   #0x1, R15
+   \   00002E   F93F         JMP     ??HEXtoBCD_1
+     21          	}
+     22          	adc_char[ONE] = 0x30 + value;
+   \                     ??HEXtoBCD_7:
+   \   000030   0E12         PUSH.W  R14
+   \   000032   C14F0000     MOV.B   R15, 0(SP)
+   \   000036   3E41         POP.W   R14
+   \   000038   7E503000     ADD.B   #0x30, R14
+   \   00003C   C24E....     MOV.B   R14, &adc_char + 1
+     23          	value = ZERO;
+   \   000040   0F43         MOV.W   #0x0, R15
+     24          
+     25          	while (v_detect_left_hex > 9){
+   \                     ??HEXtoBCD_2:
+   \   000042   3C900A00     CMP.W   #0xa, R12
+   \   000046   0428         JNC     ??HEXtoBCD_8
+     26          		v_detect_left_hex = v_detect_left_hex - 10;
+   \   000048   3C50F6FF     ADD.W   #0xfff6, R12
+     27          		value++;
+   \   00004C   1F53         ADD.W   #0x1, R15
+   \   00004E   F93F         JMP     ??HEXtoBCD_2
+     28          	}
+     29          	adc_char[TWO] = 0x30 + value;
+   \                     ??HEXtoBCD_8:
+   \   000050   0E12         PUSH.W  R14
+   \   000052   C14F0000     MOV.B   R15, 0(SP)
+   \   000056   3E41         POP.W   R14
+   \   000058   7E503000     ADD.B   #0x30, R14
+   \   00005C   C24E....     MOV.B   R14, &adc_char + 2
+     30          	adc_char[THREE] = 0x30 + v_detect_left_hex;
+   \   000060   0E12         PUSH.W  R14
+   \   000062   C14C0000     MOV.B   R12, 0(SP)
+   \   000066   3E41         POP.W   R14
+   \   000068   7E503000     ADD.B   #0x30, R14
+   \   00006C   C24E....     MOV.B   R14, &adc_char + 3
+     31          	value = ZERO;
+   \   000070   0F43         MOV.W   #0x0, R15
+     32          
+     33          	while (v_detect_right_hex > 999){
+   \                     ??HEXtoBCD_3:
+   \   000072   3D90E803     CMP.W   #0x3e8, R13
+   \   000076   0428         JNC     ??HEXtoBCD_9
+     34          		v_detect_right_hex = v_detect_right_hex - 1000;
+   \   000078   3D5018FC     ADD.W   #0xfc18, R13
+     35          		value++;
+   \   00007C   1F53         ADD.W   #0x1, R15
+   \   00007E   F93F         JMP     ??HEXtoBCD_3
+     36          	}
+     37          	adc_char[SIX] = 0x30 + value;
+   \                     ??HEXtoBCD_9:
+   \   000080   0E12         PUSH.W  R14
+   \   000082   C14F0000     MOV.B   R15, 0(SP)
+   \   000086   3E41         POP.W   R14
+   \   000088   7E503000     ADD.B   #0x30, R14
+   \   00008C   C24E....     MOV.B   R14, &adc_char + 6
+     38          	value = ZERO;
+   \   000090   0F43         MOV.W   #0x0, R15
+     39          
+     40          	while (v_detect_right_hex > 99){
+   \                     ??HEXtoBCD_4:
+   \   000092   3D906400     CMP.W   #0x64, R13
+   \   000096   0428         JNC     ??HEXtoBCD_10
+     41          		v_detect_right_hex = v_detect_right_hex - 100;
+   \   000098   3D509CFF     ADD.W   #0xff9c, R13
+     42          		value = value + 1;
+   \   00009C   1F53         ADD.W   #0x1, R15
+   \   00009E   F93F         JMP     ??HEXtoBCD_4
+     43          	}
+     44          	adc_char[SEVEN] = 0x30 + value;
+   \                     ??HEXtoBCD_10:
+   \   0000A0   0E12         PUSH.W  R14
+   \   0000A2   C14F0000     MOV.B   R15, 0(SP)
+   \   0000A6   3E41         POP.W   R14
+   \   0000A8   7E503000     ADD.B   #0x30, R14
+   \   0000AC   C24E....     MOV.B   R14, &adc_char + 7
+     45          	value = ZERO;
+   \   0000B0   0F43         MOV.W   #0x0, R15
+     46          	while (v_detect_right_hex > 9){
+   \                     ??HEXtoBCD_5:
+   \   0000B2   3D900A00     CMP.W   #0xa, R13
+   \   0000B6   0428         JNC     ??HEXtoBCD_11
+     47          		v_detect_right_hex = v_detect_right_hex - 10;
+   \   0000B8   3D50F6FF     ADD.W   #0xfff6, R13
+     48          		value++;
+   \   0000BC   1F53         ADD.W   #0x1, R15
+   \   0000BE   F93F         JMP     ??HEXtoBCD_5
+     49          	}
+     50          	adc_char[EIGHT] = 0x30 + value;
+   \                     ??HEXtoBCD_11:
+   \   0000C0   0E12         PUSH.W  R14
+   \   0000C2   C14F0000     MOV.B   R15, 0(SP)
+   \   0000C6   3E41         POP.W   R14
+   \   0000C8   7E503000     ADD.B   #0x30, R14
+   \   0000CC   C24E....     MOV.B   R14, &adc_char + 8
+     51          	adc_char[NINE] = 0x30 + v_detect_right_hex;
+   \   0000D0   0E12         PUSH.W  R14
+   \   0000D2   C14D0000     MOV.B   R13, 0(SP)
+   \   0000D6   3E41         POP.W   R14
+   \   0000D8   7E503000     ADD.B   #0x30, R14
+   \   0000DC   C24E....     MOV.B   R14, &adc_char + 9
+     52          }
+   \   0000E0   1001         RETA
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for adc_char>`:
+   \   000000   202020202020 DC8 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0
+   \            2020202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   HEXtoBCD
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Initializer for adc_char>
+     226  HEXtoBCD
+      11  adc_char
+
+ 
+ 226 bytes in segment CODE
+  11 bytes in segment DATA16_I
+  11 bytes in segment DATA16_ID
+ 
+ 226 bytes of CODE  memory
+  11 bytes of CONST memory
+  11 bytes of DATA  memory
+
+Errors: none
+Warnings: none

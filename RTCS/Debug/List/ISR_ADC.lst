@@ -1,0 +1,235 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           17/Aug/2019  11:54:17
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\ISR_ADC.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EWCC14.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\ISR_ADC.c" -lC
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\ISR_ADC.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\ISR_ADC.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\ISR_ADC.c
+      1          //******************************************************************************
+      2          // File Name: ADC_Interrupt.c
+      3          // Description: This file contains the code for handling ADC interrupts from
+      4          // three different channels, Thumb Wheel, left and right IR detectors.
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADCCTL0_L
+   \                     _A_ADCCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADCMCTL0_L
+   \                     _A_ADCMCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x712
+   \   union <unnamed> _A_ADCMEM0_L
+   \                     _A_ADCMEM0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71e
+   \   union <unnamed> _A_ADCIV_L
+   \                     _A_ADCIV_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          unsigned int channel;
+   \                     channel:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          volatile unsigned int v_detect_left;
+   \                     v_detect_left:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          volatile unsigned int v_detect_right;
+   \                     v_detect_right:
+   \   000000                DS8 2
+     17          
+     18          #pragma vector = ADC_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     19          __interrupt void ADC_ISR(void){
+   \                     ADC_ISR:
+   \   000000   0F12         PUSH.W  R15
+     20          	switch(__even_in_range(ADCIV,ADCIV_ADCIFG)){
+   \   000002   1F421E07     MOV.W   &0x71e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for ADC_ISR>_0`:
+   \   000008   3F3C         JMP     ??ADC_ISR_0
+   \   00000A   3E3C         JMP     ??ADC_ISR_0
+   \   00000C   3D3C         JMP     ??ADC_ISR_0
+   \   00000E   3C3C         JMP     ??ADC_ISR_0
+   \   000010   3B3C         JMP     ??ADC_ISR_0
+   \   000012   3A3C         JMP     ??ADC_ISR_0
+   \   000014   003C         JMP     ??ADC_ISR_5
+     21          		case ADCIV_NONE:
+     22          			break;
+     23          		case ADCIV_ADCOVIFG://When a conversion result is written to the ADCMEM0
+     24          		// before its previous conversion result was read.
+     25          			break;
+     26          		case ADCIV_ADCTOVIFG://ADC conversion-time overflow
+     27          			break;
+     28          		case ADCIV_ADCHIIFG://Window comparator interrupt flags
+     29          			break;
+     30          		case ADCIV_ADCLOIFG://Window comparator interrupt flag
+     31          			break;
+     32          		case ADCIV_ADCINIFG://Window comparator interrupt flag
+     33          			break;
+     34          		case ADCIV_ADCIFG://ADCMEM0 memory register with the conversion result
+     35          			ADCCTL0 &= ~ADCENC;
+   \                     ??ADC_ISR_5:
+   \   000016   A2C30007     BIC.W   #0x2, &0x700
+     36          			switch(channel){
+   \   00001A   1F42....     MOV.W   &channel, R15
+   \   00001E   0F83         SUB.W   #0x0, R15
+   \   000020   0524         JEQ     ??ADC_ISR_2
+   \   000022   1F83         SUB.W   #0x1, R15
+   \   000024   1324         JEQ     ??ADC_ISR_3
+   \   000026   1F83         SUB.W   #0x1, R15
+   \   000028   1E24         JEQ     ??ADC_ISR_4
+   \   00002A   2A3C         JMP     ??ADC_ISR_1
+     37          				case ZERO://Thumb Wheel Channel
+     38          					v_thumb = ADCMEM0>>NINE;//Divides the value read from the thumb wheel by nine and stores it
+   \                     ??ADC_ISR_2:
+   \   00002C   1F421207     MOV.W   &0x712, R15
+   \   000030   8F10         SWPB    R15
+   \   000032   3FF0FF00     AND.W   #0xff, R15
+   \   000036   0F11         RRA.W   R15
+   \   000038   824F....     MOV.W   R15, &v_thumb
+     39          					ADCMCTL0 &= ~ADCINCH_5;//Turns off the ADC channel for the thumb wheel
+   \   00003C   B2F0FAFF0A07 AND.W   #0xfffa, &0x70a
+     40          					ADCMCTL0 |= ADCINCH_2;//Turns on the ADC channel for the left detector
+   \   000042   A2D30A07     BIS.W   #0x2, &0x70a
+     41          					channel++;//Selects the left detector channel
+   \   000046   9253....     ADD.W   #0x1, &channel
+     42          					break;
+   \   00004A   1A3C         JMP     ??ADC_ISR_1
+     43          				case ONE://Left Detector Channel
+     44          					v_detect_left = ADCMEM0>>TWO;//Divides the value read from the left detector by two and stores it
+   \                     ??ADC_ISR_3:
+   \   00004C   1F421207     MOV.W   &0x712, R15
+   \   000050   5F07         RRUM.W  #0x2, R15
+   \   000052   824F....     MOV.W   R15, &v_detect_left
+     45          					ADCMCTL0 &= ~ADCINCH_2;//Turns off the ADC channel for the left detector
+   \   000056   A2C30A07     BIC.W   #0x2, &0x70a
+     46          					ADCMCTL0 |= ADCINCH_3;//Turns on the ADC channel for the right detector
+   \   00005A   B2D003000A07 BIS.W   #0x3, &0x70a
+     47          					channel++;//Selects the right detector channel
+   \   000060   9253....     ADD.W   #0x1, &channel
+     48          					break;
+   \   000064   0D3C         JMP     ??ADC_ISR_1
+     49          				case TWO://Right Detector Channel
+     50          					v_detect_right = ADCMEM0>>TWO;//Divides the value read from the right detector by two and stores it
+   \                     ??ADC_ISR_4:
+   \   000066   1F421207     MOV.W   &0x712, R15
+   \   00006A   5F07         RRUM.W  #0x2, R15
+   \   00006C   824F....     MOV.W   R15, &v_detect_right
+     51          					ADCMCTL0 &= ~ADCINCH_3;//Turns off the ADC channel for the right detector
+   \   000070   B2F0FCFF0A07 AND.W   #0xfffc, &0x70a
+     52          					ADCMCTL0 |= ADCINCH_5;//Turns on the ADC channel for the thumb wheel
+   \   000076   B2D005000A07 BIS.W   #0x5, &0x70a
+     53          					channel = ZERO;//Selects the thumb wheel
+   \   00007C   8243....     MOV.W   #0x0, &channel
+     54          					break;
+     55          			}
+     56          			ADCCTL0 |= ADCENC;
+   \                     ??ADC_ISR_1:
+   \   000080   A2D30007     BIS.W   #0x2, &0x700
+     57          			ADCCTL0 |= ADCSC;
+   \   000084   92D30007     BIS.W   #0x1, &0x700
+     58          			break;
+     59          		default:
+     60          			break;
+     61          	}
+     62          }
+   \                     ??ADC_ISR_0:
+   \   000088   3F41         POP.W   R15
+   \   00008A   0013         RETI
+   \   00008C                REQUIRE _A_ADCCTL0_L
+   \   00008C                REQUIRE _A_ADCMEM0_L
+   \   00008C                REQUIRE _A_ADCMCTL0_L
+   \   00008C                REQUIRE _A_ADCIV_L
+
+   \                                 In  segment INTVEC, offset 0x3a, root
+   \                     `??ADC_ISR::??INTVEC 58`:
+   \   00003A   ....         DC16    ADC_ISR
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   ADC_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     140  ADC_ISR
+       2  ADC_ISR::??INTVEC 58
+       2  _A_ADCCTL0_L
+       2  _A_ADCIV_L
+       2  _A_ADCMCTL0_L
+       2  _A_ADCMEM0_L
+       2  channel
+       2  v_detect_left
+       2  v_detect_right
+
+ 
+   8 bytes in segment DATA16_AN
+   6 bytes in segment DATA16_Z
+   2 bytes in segment INTVEC
+ 140 bytes in segment ISR_CODE
+ 
+ 140 bytes of CODE  memory
+   0 bytes of CONST memory (+ 2 bytes shared)
+   6 bytes of DATA  memory (+ 8 bytes shared)
+
+Errors: none
+Warnings: none

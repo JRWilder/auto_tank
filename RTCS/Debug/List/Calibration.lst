@@ -1,0 +1,244 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           17/Aug/2019  12:21:23
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Calibration.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EW9C23.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Calibration.c"
+#        -lC "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\Calibration.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\Calibration.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\Calibration.c
+      1          //******************************************************************************
+      2          // File Name: Calibration.c
+      3          // Description: This file contains the code for the autonomous car to calibrate
+      4          // its IR detector values for both on white and on the black line.
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          
+     14          ///////////////////////// Calibration Operation /////////////////////////
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          unsigned int left_white_value = ZERO;//Used to store the average value read from the left detector off of the black tape.
+   \                     left_white_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          unsigned int right_white_value = ZERO;//Used to store the average value read from the right detector off of the black tape.
+   \                     right_white_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          unsigned int left_black_value = ZERO;//Used to store the average value read from the left detector on the black tape.
+   \                     left_black_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          unsigned int right_black_value = ZERO;//Used to store the average value read from the right detector on the black tape.
+   \                     right_black_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          unsigned int read_count = ZERO;//Used to keep track of how many readings are taken from the detectors.
+   \                     read_count:
+   \   000000                DS8 2
+     20          
+
+   \                                 In  segment CODE, align 2
+     21          void calibration(void){
+   \                     calibration:
+     22          	displays(SIX);
+   \   000000   3C400600     MOV.W   #0x6, R12
+   \   000004   ........     CALLA   #displays
+     23          	switch(operation_state){
+   \   000008   1F42....     MOV.W   &operation_state, R15
+   \   00000C   0F83         SUB.W   #0x0, R15
+   \   00000E   6D24         JEQ     ??calibration_1
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   0924         JEQ     ??calibration_4
+   \   000014   1F83         SUB.W   #0x1, R15
+   \   000016   1524         JEQ     ??calibration_5
+   \   000018   1F83         SUB.W   #0x1, R15
+   \   00001A   2324         JEQ     ??calibration_6
+   \   00001C   1F83         SUB.W   #0x1, R15
+   \   00001E   2E24         JEQ     ??calibration_7
+   \   000020   1F83         SUB.W   #0x1, R15
+   \   000022   5E24         JEQ     ??calibration_8
+   \   000024   1001         RETA
+     24          		case ZERO://Setup.
+     25          			break;
+     26          		case ONE://Emitter_On.
+     27          			P5OUT |= IR_LED;//Turns on the IR LED.
+   \                     ??calibration_4:
+   \   000026   F2D010004202 BIS.B   #0x10, &0x242
+     28          			left_white_value = ZERO;
+   \   00002C   8243....     MOV.W   #0x0, &left_white_value
+     29          			right_white_value = ZERO;
+   \   000030   8243....     MOV.W   #0x0, &right_white_value
+     30          			left_black_value = ZERO;
+   \   000034   8243....     MOV.W   #0x0, &left_black_value
+     31          			right_black_value = ZERO;
+   \   000038   8243....     MOV.W   #0x0, &right_black_value
+     32          			read_count = ZERO;
+   \   00003C   8243....     MOV.W   #0x0, &read_count
+     33          			break;
+   \   000040   1001         RETA
+     34          		case TWO://White Calibration.
+     35          			if(read_count < TEN){//If the number of readings taken is less then 10 then continue to take readings.
+   \                     ??calibration_5:
+   \   000042   B2900A00.... CMP.W   #0xa, &read_count
+   \   000048   092C         JC      ??calibration_9
+     36          				read_count++;//Increments the number of readings taken.
+   \   00004A   9253....     ADD.W   #0x1, &read_count
+     37          				left_white_value += v_detect_left;//Add the current reading from the left detector to the current left-white sum.
+   \   00004E   9252........ ADD.W   &v_detect_left, &left_white_value
+     38          				right_white_value += v_detect_right;//Add the current reading from the right detector to the current right_white sum.
+   \   000054   9252........ ADD.W   &v_detect_right, &right_white_value
+   \   00005A   1001         RETA
+     39          			}else{
+     40          				read_count = ZERO;//Reset the read count.
+   \                     ??calibration_9:
+   \   00005C   8243....     MOV.W   #0x0, &read_count
+     41          			}
+     42          			break;
+   \   000060   1001         RETA
+     43          		case THREE://Black Calibration.
+     44          			if(read_count < TEN){//If the number of readings taken is less then 10 then continue to take readings.
+   \                     ??calibration_6:
+   \   000062   B2900A00.... CMP.W   #0xa, &read_count
+   \   000068   402C         JC      ??calibration_1
+     45          				read_count++;//Increments the number of readings taken.
+   \   00006A   9253....     ADD.W   #0x1, &read_count
+     46          				left_black_value += v_detect_left;//Add the current reading from the left detector to the current left-black sum.
+   \   00006E   9252........ ADD.W   &v_detect_left, &left_black_value
+     47          				right_black_value += v_detect_right;//Add the current reading from the right detector to the current right_black sum.
+   \   000074   9252........ ADD.W   &v_detect_right, &right_black_value
+     48          			}
+     49          			break;
+   \   00007A   1001         RETA
+     50          		case FOUR://Emitter Off.
+     51          			P5OUT &= ~IR_LED;
+   \                     ??calibration_7:
+   \   00007C   F2C010004202 BIC.B   #0x10, &0x242
+     52          			left_white_value = left_white_value / read_count;//Take the average of all the readings from the left detector off of the tape.
+   \   000082   1C42....     MOV.W   &left_white_value, R12
+   \   000086   1E42....     MOV.W   &read_count, R14
+   \   00008A   ........     CALLA   #?DivMod16u
+   \   00008E   824C....     MOV.W   R12, &left_white_value
+     53          			right_white_value = right_white_value / read_count;//Take the average of all the readings from the right detector off of the tape.
+   \   000092   1C42....     MOV.W   &right_white_value, R12
+   \   000096   1E42....     MOV.W   &read_count, R14
+   \   00009A   ........     CALLA   #?DivMod16u
+   \   00009E   824C....     MOV.W   R12, &right_white_value
+     54          			left_black_value = left_black_value / read_count;//Take the average of all the readings from the left detector on the tape.
+   \   0000A2   1C42....     MOV.W   &left_black_value, R12
+   \   0000A6   1E42....     MOV.W   &read_count, R14
+   \   0000AA   ........     CALLA   #?DivMod16u
+   \   0000AE   824C....     MOV.W   R12, &left_black_value
+     55          			right_black_value = right_black_value / read_count;//Take the average of all the readings from the right detector on the tape.
+   \   0000B2   1C42....     MOV.W   &right_black_value, R12
+   \   0000B6   1E42....     MOV.W   &read_count, R14
+   \   0000BA   ........     CALLA   #?DivMod16u
+   \   0000BE   824C....     MOV.W   R12, &right_black_value
+     56          			left_white_value -= SUBTRACT_VALUE;//Subtracts 50 from average left_white readings to account for slight variences.
+   \   0000C2   B250CEFF.... ADD.W   #0xffce, &left_white_value
+     57          			right_white_value -= SUBTRACT_VALUE;//Subtracts 50 from average right_white readings to account for slight variences.
+   \   0000C8   B250CEFF.... ADD.W   #0xffce, &right_white_value
+     58          			left_black_value -= SUBTRACT_VALUE;//Subtracts 50 from average left_black readings to account for slight variences.
+   \   0000CE   B250CEFF.... ADD.W   #0xffce, &left_black_value
+     59          			right_black_value -= SUBTRACT_VALUE;//Subtracts 50 from average left_black readings to account for slight variences.
+   \   0000D4   B250CEFF.... ADD.W   #0xffce, &right_black_value
+     60          			operation_state++;//Increments the operation state.
+   \   0000DA   9253....     ADD.W   #0x1, &operation_state
+     61          			break;
+   \   0000DE   1001         RETA
+     62          		case FIVE://End calibration and switch to line detection.
+     63          			operation_state = ZERO;//Resets the operation state to setup.
+   \                     ??calibration_8:
+   \   0000E0   8243....     MOV.W   #0x0, &operation_state
+     64          			operation = FIVE;//Changes to the line follow operation.
+   \   0000E4   B2400500.... MOV.W   #0x5, &operation
+     65          			break;
+     66          	}
+     67          }
+   \                     ??calibration_1:
+   \   0000EA   1001         RETA
+   \   0000EC                REQUIRE _A_PCOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   calibration
+        4   -> displays
+        4 ?DivMod16u
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PCOUT_L
+     236  calibration
+       2  left_black_value
+       2  left_white_value
+       2  read_count
+       2  right_black_value
+       2  right_white_value
+
+ 
+ 236 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+  10 bytes in segment DATA16_Z
+ 
+ 236 bytes of CODE memory
+  10 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

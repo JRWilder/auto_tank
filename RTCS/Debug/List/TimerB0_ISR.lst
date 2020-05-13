@@ -1,0 +1,370 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           15/Aug/2019  19:22:24
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\TimerB0_ISR.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EW98A8.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\TimerB0_ISR.c"
+#        -lC "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\TimerB0_ISR.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\TimerB0_ISR.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\TimerB0_ISR.c
+      1          //******************************************************************************
+      2          // File Name : timerB0_ISR.c
+      3          // Description: This file contains the code for timer B0 ISR.
+      4          // Author: Johnathan Wilder
+      5          // Date: May 2019
+      6          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      7          //******************************************************************************
+      8          
+      9          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x21a
+   \   union <unnamed> _A_PAIE_L
+   \                     _A_PAIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x21c
+   \   union <unnamed> _A_PAIFG_L
+   \                     _A_PAIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23a
+   \   union <unnamed> _A_PBIE_L
+   \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x384
+   \   union <unnamed> _A_TB0CCTL1_L
+   \                     _A_TB0CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x386
+   \   union <unnamed> _A_TB0CCTL2_L
+   \                     _A_TB0CCTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x392
+   \   union <unnamed> _A_TB0CCR0_L
+   \                     _A_TB0CCR0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x394
+   \   union <unnamed> _A_TB0CCR1_L
+   \                     _A_TB0CCR1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x396
+   \   union <unnamed> _A_TB0CCR2_L
+   \                     _A_TB0CCR2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3ae
+   \   union <unnamed> _A_TB0IV_L
+   \                     _A_TB0IV_L:
+   \   000000                DS8 2
+     10          #include "Functions.h"
+     11          #include "Macros.h"
+     12          
+     13          //TimerB0_0
+     14          //TimerB0_1
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     15          char	SW1_press = LOW;
+   \                     SW1_press:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for SW1_press>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     16          char SW1_debounce = LOW;
+   \                     SW1_debounce:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for SW1_debounce>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          unsigned int SW1_debounce_count = ZERO;
+   \                     SW1_debounce_count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     18          char	SW2_press = LOW;
+   \                     SW2_press:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for SW2_press>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     19          char SW2_debounce = LOW;
+   \                     SW2_debounce:
+   \   000000                DS8 1
+   \   000001                REQUIRE `?<Initializer for SW2_debounce>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          unsigned int SW2_debounce_count = ZERO;
+   \                     SW2_debounce_count:
+   \   000000                DS8 2
+     21          //TimerB0_2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     22          unsigned int timerB0_2_count = ZERO;
+   \                     timerB0_2_count:
+   \   000000                DS8 2
+     23          
+     24          #pragma vector = TIMER0_B0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     25          __interrupt void Timer0_B0_ISR(void){
+   \                     Timer0_B0_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     26          	if(update_display_count++ > TWOH_MS_COUNT){
+   \   000002   1F42....     MOV.W   &update_display_count, R15
+   \   000006   0E4F         MOV.W   R15, R14
+   \   000008   1E53         ADD.W   #0x1, R14
+   \   00000A   824E....     MOV.W   R14, &update_display_count
+   \   00000E   3F900300     CMP.W   #0x3, R15
+   \   000012   0428         JNC     ??Timer0_B0_ISR_0
+     27          		update_display_count = ZERO;
+   \   000014   8243....     MOV.W   #0x0, &update_display_count
+     28          		update_display = ONE;
+   \   000018   D243....     MOV.B   #0x1, &update_display
+     29          	}
+     30          	TB0CCR0 += TB0CCR0_INTERVAL;
+   \                     ??Timer0_B0_ISR_0:
+   \   00001C   B25050C39203 ADD.W   #0xc350, &0x392
+     31          }
+   \   000022   1E17         POPM.W  #0x2, R15
+   \   000024   0013         RETI
+   \   000026                REQUIRE _A_TB0CCR0_L
+     32          
+     33          #pragma vector = TIMER0_B1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     34          __interrupt void Timer0_B1_ISR(void){
+   \                     Timer0_B1_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+     35          	// TimerB0 1-2 and overflow Interrupt Vector (TBIV) handler
+     36          	switch(__even_in_range(TB0IV,FOURTEEN)){
+   \   000002   1F42AE03     MOV.W   &0x3ae, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for Timer0_B1_ISR>_0`:
+   \   000008   4D3C         JMP     ??Timer0_B1_ISR_1
+   \   00000A   063C         JMP     ??Timer0_B1_ISR_5
+   \   00000C   353C         JMP     ??Timer0_B1_ISR_6
+   \   00000E   4A3C         JMP     ??Timer0_B1_ISR_1
+   \   000010   493C         JMP     ??Timer0_B1_ISR_1
+   \   000012   483C         JMP     ??Timer0_B1_ISR_1
+   \   000014   473C         JMP     ??Timer0_B1_ISR_1
+   \   000016   463C         JMP     ??Timer0_B1_ISR_1
+     37          		case ZERO:
+     38          			break; // No interrupt
+     39          
+     40          		case TWO://Switch Debounce
+     41          			if(SW1_debounce){
+   \                     ??Timer0_B1_ISR_5:
+   \   000018   C293....     CMP.B   #0x0, &SW1_debounce
+   \   00001C   1324         JEQ     ??Timer0_B1_ISR_2
+     42          				if(SW1_debounce_count++ > DEBOUNCE_COUNT){
+   \   00001E   1F42....     MOV.W   &SW1_debounce_count, R15
+   \   000022   0E4F         MOV.W   R15, R14
+   \   000024   1E53         ADD.W   #0x1, R14
+   \   000026   824E....     MOV.W   R14, &SW1_debounce_count
+   \   00002A   3F900600     CMP.W   #0x6, R15
+   \   00002E   0A28         JNC     ??Timer0_B1_ISR_2
+     43          					P4IFG &= ~SW1; //Disable the port interrupt flag
+   \   000030   E2C33D02     BIC.B   #0x2, &0x23d
+     44          					P4IE |= SW1;
+   \   000034   E2D33B02     BIS.B   #0x2, &0x23b
+     45          					TB0CCTL1 &= ~CCIE;
+   \   000038   B2C010008403 BIC.W   #0x10, &0x384
+     46          					SW1_debounce = LOW;
+   \   00003E   F2404C00.... MOV.B   #0x4c, &SW1_debounce
+     47          				}
+     48          			}
+     49          			if(SW2_debounce){
+   \                     ??Timer0_B1_ISR_2:
+   \   000044   C293....     CMP.B   #0x0, &SW2_debounce
+   \   000048   1324         JEQ     ??Timer0_B1_ISR_3
+     50          				if(SW2_debounce_count++ > DEBOUNCE_COUNT){
+   \   00004A   1F42....     MOV.W   &SW2_debounce_count, R15
+   \   00004E   0E4F         MOV.W   R15, R14
+   \   000050   1E53         ADD.W   #0x1, R14
+   \   000052   824E....     MOV.W   R14, &SW2_debounce_count
+   \   000056   3F900600     CMP.W   #0x6, R15
+   \   00005A   0A28         JNC     ??Timer0_B1_ISR_3
+     51          					P2IFG &= ~SW2; 		//Disable the port interrupt flag
+   \   00005C   F2C21D02     BIC.B   #0x8, &0x21d
+     52          					P2IE |= SW2;
+   \   000060   F2D21B02     BIS.B   #0x8, &0x21b
+     53          					TB0CCTL1 &= ~CCIE;
+   \   000064   B2C010008403 BIC.W   #0x10, &0x384
+     54          					SW2_debounce = LOW;
+   \   00006A   F2404C00.... MOV.B   #0x4c, &SW2_debounce
+     55          				}
+     56          			}
+     57          			TB0CCR1 += TB0CCR1_INTERVAL; // Add Offset to TBCCR1
+   \                     ??Timer0_B1_ISR_3:
+   \   000070   B25050C39403 ADD.W   #0xc350, &0x394
+     58          			break;
+   \   000076   163C         JMP     ??Timer0_B1_ISR_1
+     59          
+     60          		case FOUR://Switch2 Operation
+     61          			if(SW2_press){
+   \                     ??Timer0_B1_ISR_6:
+   \   000078   C293....     CMP.B   #0x0, &SW2_press
+   \   00007C   1024         JEQ     ??Timer0_B1_ISR_4
+     62          				if(timerB0_2_count++ > OP_STATE_DELAY_COUNT){
+   \   00007E   1F42....     MOV.W   &timerB0_2_count, R15
+   \   000082   0E4F         MOV.W   R15, R14
+   \   000084   1E53         ADD.W   #0x1, R14
+   \   000086   824E....     MOV.W   R14, &timerB0_2_count
+   \   00008A   3F900600     CMP.W   #0x6, R15
+   \   00008E   0728         JNC     ??Timer0_B1_ISR_4
+     63          					TB0CCTL2 &= ~CCIE;
+   \   000090   B2C010008603 BIC.W   #0x10, &0x386
+     64          					timerB0_2_count = ZERO;
+   \   000096   8243....     MOV.W   #0x0, &timerB0_2_count
+     65          					operation_state++;
+   \   00009A   9253....     ADD.W   #0x1, &operation_state
+     66          				}
+     67          			}
+     68          			TB0CCR2 += TB0CCR2_INTERVAL;
+   \                     ??Timer0_B1_ISR_4:
+   \   00009E   B25050C39603 ADD.W   #0xc350, &0x396
+     69          			break;
+     70          
+     71          		case FOURTEEN: // overflow
+     72          			break;
+     73          
+     74          		default: break;
+     75          	}
+     76          }
+   \                     ??Timer0_B1_ISR_1:
+   \   0000A4   1E17         POPM.W  #0x2, R15
+   \   0000A6   0013         RETI
+   \   0000A8                REQUIRE _A_PBIFG_L
+   \   0000A8                REQUIRE _A_PBIE_L
+   \   0000A8                REQUIRE _A_TB0CCTL1_L
+   \   0000A8                REQUIRE _A_PAIFG_L
+   \   0000A8                REQUIRE _A_PAIE_L
+   \   0000A8                REQUIRE _A_TB0CCR1_L
+   \   0000A8                REQUIRE _A_TB0CCTL2_L
+   \   0000A8                REQUIRE _A_TB0CCR2_L
+   \   0000A8                REQUIRE _A_TB0IV_L
+
+   \                                 In  segment INTVEC, offset 0x54, root
+   \                     `??Timer0_B1_ISR::??INTVEC 84`:
+   \   000054   ....         DC16    Timer0_B1_ISR
+
+   \                                 In  segment INTVEC, offset 0x56, root
+   \                     `??Timer0_B0_ISR::??INTVEC 86`:
+   \   000056   ....         DC16    Timer0_B0_ISR
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for SW1_press>`:
+   \   000000   4C           DC8 76
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for SW1_debounce>`:
+   \   000000   4C           DC8 76
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for SW2_press>`:
+   \   000000   4C           DC8 76
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for SW2_debounce>`:
+   \   000000   4C           DC8 76
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      8   Timer0_B0_ISR
+      8   Timer0_B1_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ?<Initializer for SW1_debounce>
+       1  ?<Initializer for SW1_press>
+       1  ?<Initializer for SW2_debounce>
+       1  ?<Initializer for SW2_press>
+       1  SW1_debounce
+       2  SW1_debounce_count
+       1  SW1_press
+       1  SW2_debounce
+       2  SW2_debounce_count
+       1  SW2_press
+      38  Timer0_B0_ISR
+       2  Timer0_B0_ISR::??INTVEC 86
+     168  Timer0_B1_ISR
+       2  Timer0_B1_ISR::??INTVEC 84
+       2  _A_PAIE_L
+       2  _A_PAIFG_L
+       2  _A_PBIE_L
+       2  _A_PBIFG_L
+       2  _A_TB0CCR0_L
+       2  _A_TB0CCR1_L
+       2  _A_TB0CCR2_L
+       2  _A_TB0CCTL1_L
+       2  _A_TB0CCTL2_L
+       2  _A_TB0IV_L
+       2  timerB0_2_count
+
+ 
+  20 bytes in segment DATA16_AN
+   4 bytes in segment DATA16_I
+   4 bytes in segment DATA16_ID
+   6 bytes in segment DATA16_Z
+   4 bytes in segment INTVEC
+ 206 bytes in segment ISR_CODE
+ 
+ 206 bytes of CODE  memory
+   4 bytes of CONST memory (+  4 bytes shared)
+  10 bytes of DATA  memory (+ 20 bytes shared)
+
+Errors: none
+Warnings: none
