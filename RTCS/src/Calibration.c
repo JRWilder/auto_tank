@@ -10,6 +10,7 @@
 #include "msp430.h"
 #include "Functions.h"
 #include "Macros.h"
+#include "Ports.h"
 
 ///////////////////////// Calibration Operation /////////////////////////
 unsigned int left_white_value = ZERO;//Used to store the average value read from the left detector off of the black tape.

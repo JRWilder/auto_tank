@@ -11,7 +11,8 @@
 #include "msp430.h"
 #include "Functions.h"
 #include "Macros.h"
-#include "SERIAL_COM"
+#include "Ports.h"
+#include "SERIAL_COM.h"
 
 char command1[THREE] = "AT\r";
 char command2[TWENTY] = "AT+WSYNCINTRL=65535\r";

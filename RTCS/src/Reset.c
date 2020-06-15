@@ -10,6 +10,7 @@
 #include "msp430.h"
 #include "Functions.h"
 #include "Macros.h"
+#include "Ports.h"
 
 void reset(unsigned int operation){
 	pwm(OFF);

@@ -406,6 +406,8 @@
                 <option>
                     <name>newCCIncludePaths</name>
                     <state>./</state>
+                    <state>C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\include</state>
+                    <state>C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\src</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -812,6 +814,8 @@
                 <option>
                     <name>XIncludes</name>
                     <state>$TOOLKIT_DIR$\LIB\</state>
+                    <state>C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\src</state>
+                    <state>C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\include</state>
                 </option>
                 <option>
                     <name>ModuleStatus</name>
@@ -2303,91 +2307,103 @@
             <name>$PROJ_DIR$\Compiled\LCD.r43</name>
         </file>
     </group>
-    <file>
-        <name>$PROJ_DIR$\src\Calibration.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Displays.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Functions.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\HEXtoBCD.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\HEXtoBCD_Timer.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_ADC.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_Clocks.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_Conditions.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_Ports.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_SERIAL_COM.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Init_Timers.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\ISR_ADC.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\ISR_Ports.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\ISR_Serial.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\ISR_TimerB0.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Line_Follow.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Line_Follow.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Macros.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Main.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Ports.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\PWM.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\PWM.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Reset.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\SERIAL_COM.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\SERIAL_COM.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\system.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\Timers.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\WIFI_COM.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\src\WIFI_COM.h</name>
-    </file>
+    <group>
+        <name>include</name>
+        <file>
+            <name>$PROJ_DIR$\include\ADC.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Calibration.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Functions.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Line_Follow.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Macros.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Ports.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\PWM.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\SERIAL_COM.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\Timers.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\include\WIFI_COM.h</name>
+        </file>
+    </group>
+    <group>
+        <name>src</name>
+        <file>
+            <name>$PROJ_DIR$\src\Calibration.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Displays.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\HEXtoBCD.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\HEXtoBCD_Timer.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_ADC.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_Clocks.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_Conditions.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_Ports.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_SERIAL_COM.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Init_Timers.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\ISR_ADC.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\ISR_Ports.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\ISR_Serial.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\ISR_Timers.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Line_Follow.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\PWM.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\Reset.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\SERIAL_COM.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\system.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\src\WIFI_COM.c</name>
+        </file>
+    </group>
 </project>

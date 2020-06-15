@@ -10,6 +10,7 @@
 #include "msp430.h"
 #include "Functions.h"
 #include "Macros.h"
+#include "Ports.h"
 
 #pragma vector=PORT4_VECTOR
 __interrupt void SW1_interrupt(void){

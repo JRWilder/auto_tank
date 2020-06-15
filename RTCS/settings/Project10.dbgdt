@@ -135,7 +135,7 @@
                     <item>old_operation_state</item>
                     <item>run_display</item>
                     <item>reset_op</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>
