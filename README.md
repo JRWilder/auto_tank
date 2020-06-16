@@ -1,4 +1,4 @@
 # auto_tank
 hello there
-![](pictures/Capture.PNG)
+![](pictures/Documents.JPG)
 <img src="pictures/Capture.PNG" width="100" >
