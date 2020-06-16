@@ -1,3 +1,3 @@
 # auto_tank
 hello there
-![GitHub Logo](/pictures/Capture.png)
+<img src="pictures/Capture.png" >
