@@ -8,27 +8,44 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 	<img src="images/complete.png" width="500">
 	<img src="images/taken_apart.png" width="500">
 </p>
-
-### SolidWorks
 <p align="center">
-	<img src="images/main_assembly_part.png">
+	<img src="images/main_assembly_part.png width="500">
+	<img src="images/main_assembly_outbreak_part.png" width="500">
+	<img src="images/main_assembly_draw.png" width="2000">
 </p>
-<img align="right" src="images/main_assembly_draw.png" width="2000">
 
 ## MSP430
 <p align="center">
 	<img src="images/msp.png" width="500">
 	<img src="images/msp_under.png" width="500">
+	<img src="images/msp_board_part.png" width="2000">
+	<img src="images/msp_board_draw.png" width="2000">
 </p>
 
-### SolidWorks
-<img src="images/msp_board_draw.png" width="2000">
-
-## Power FRAM_board
+## Power Board
 <p align="center">
 	<img src="images/power_board.png" width="500">
 	<img src="images/power_board_under.png" width="500">
+	<img src="images/power_assembly_part.png" width="2000">
+	<img src="images/power_board_part.png" width="2000">
+	<img src="images/power_board_draw.png" width="2000">
 </p>
 
-### SoldiWorks
-<img src="images/power_board_draw.png" width="2000">
+## Drive Board
+<p align="center">
+	<img src="images/drive_board.png" width="500">
+	<img src="images/drive_board_under.png" width="500">
+	<img src="images/drive_assembly_part.png" width="2000">
+	<img src="images/drive_board_part.png" width="2000">
+	<img src="images/drive_board_draw.png" width="2000">
+</p>
+
+##IoT Board
+<p align="center">
+	<img src="images/IoT_board.png" width="500">
+	<img src="images/IoT_assembly_part.png" width="2000">
+	<img src="images/IoT_board_part.png" width="2000">
+	<img src="images/IoT_board_draw.png" width="2000">
+	<img src="images/IoT_module_part.png" width="2000">
+	<img src="images/IoT_module_draw.png" width="2000">
+</p>
