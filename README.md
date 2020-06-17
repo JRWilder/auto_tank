@@ -13,13 +13,13 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 <p align="center">
 	<img src="images/Documents.JPG">
 </p>
-<img align="right" src="images/Main_assembly.png" width="2000">
+<img align="right" src="images/Main_assembly.png" width="500">
 
 ## MSP430
 <p align="center">
-	<img src="images/msp.png" width="2000">
-	<img src="images/msp_under.png" width="2000">
+	<img src="images/msp.png" width="500">
+	<img src="images/msp_under.png" width="500">
 </p>
 
 ###SolidWorks
-<img align="right" src="images/FRAM_board.png" width="2000">
+<img align="right" src="images/FRAM_board.png" width="500">
