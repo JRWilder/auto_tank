@@ -11,7 +11,7 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 
 ### SolidWorks
 <p align="center">
-	<img src="images/main_assembly_part.JPG">
+	<img src="images/main_assembly_part.png">
 </p>
 <img align="right" src="images/main_assembly_draw.png" width="2000">
 
