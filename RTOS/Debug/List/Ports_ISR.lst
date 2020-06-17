@@ -1,0 +1,209 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           13/Aug/2019  19:00:44
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Ports_ISR.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EWB876.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Ports_ISR.c"
+#        -lC "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\Ports_ISR.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\Ports_ISR.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\Ports_ISR.c
+      1          //******************************************************************************
+      2          // File Name: Ports_ISR.c
+      3          // Description: This file contains the Main Routine - "While" Operating System
+      4          // Author: Johnathan Wilder
+      5          // Date: May 2019
+      6          // Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      7          //******************************************************************************
+      8          
+      9          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x21a
+   \   union <unnamed> _A_PAIE_L
+   \                     _A_PAIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x21c
+   \   union <unnamed> _A_PAIFG_L
+   \                     _A_PAIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23a
+   \   union <unnamed> _A_PBIE_L
+   \                     _A_PBIE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x380
+   \   union <unnamed> _A_TB0CTL_L
+   \                     _A_TB0CTL_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x384
+   \   union <unnamed> _A_TB0CCTL1_L
+   \                     _A_TB0CCTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x386
+   \   union <unnamed> _A_TB0CCTL2_L
+   \                     _A_TB0CCTL2_L:
+   \   000000                DS8 2
+     10          #include "Functions.h"
+     11          #include "Macros.h"
+     12          
+     13          #pragma vector=PORT4_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     14          __interrupt void SW1_interrupt(void){
+   \                     SW1_interrupt:
+     15           	if (P4IFG & SW1){
+   \   000000   E2B33D02     BIT.B   #0x2, &0x23d
+   \   000004   1828         JNC     ??SW1_interrupt_0
+     16          		SW1_press = HIGH; //Set a variable to identify the switch has been pressed.
+   \   000006   F2404800.... MOV.B   #0x48, &SW1_press
+     17          		SW1_debounce = HIGH; //Set a variable to identify the switch is being debounced.
+   \   00000C   F2404800.... MOV.B   #0x48, &SW1_debounce
+     18          		SW1_debounce_count = LOW; //Reset the count required of the debounce.
+   \   000012   B2404C00.... MOV.W   #0x4c, &SW1_debounce_count
+     19          		P4IE &= ~SW1; //Disable the Switch Interrupt.
+   \   000018   E2C33B02     BIC.B   #0x2, &0x23b
+     20          		TB0CTL |= TBCLR; //Resets TB0R, clock divider, count direction
+   \   00001C   A2D28003     BIS.W   #0x4, &0x380
+     21          
+     22          		//Switch1 Function
+     23          		if(run_operation != HIGH){
+   \   000020   F2904800.... CMP.B   #0x48, &run_operation
+   \   000026   0424         JEQ     ??SW1_interrupt_1
+     24          			run_operation = HIGH;
+   \   000028   F2404800.... MOV.B   #0x48, &run_operation
+   \   00002E   033C         JMP     ??SW1_interrupt_0
+     25          		}else{
+     26          			reset_op = HIGH;
+   \                     ??SW1_interrupt_1:
+   \   000030   F2404800.... MOV.B   #0x48, &reset_op
+     27          		}
+     28          	}
+     29          	TB0CCTL1 |= CCIE;
+   \                     ??SW1_interrupt_0:
+   \   000036   B2D010008403 BIS.W   #0x10, &0x384
+     30          }
+   \   00003C   0013         RETI
+   \   00003E                REQUIRE _A_PBIFG_L
+   \   00003E                REQUIRE _A_PBIE_L
+   \   00003E                REQUIRE _A_TB0CTL_L
+   \   00003E                REQUIRE _A_TB0CCTL1_L
+     31          
+     32          #pragma vector=PORT2_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     33          __interrupt void SW2_interrupt(void){
+   \                     SW2_interrupt:
+     34          	if (P2IFG & SW2){
+   \   000000   F2B21D02     BIT.B   #0x8, &0x21d
+   \   000004   1528         JNC     ??SW2_interrupt_0
+     35          		SW2_press = HIGH; //Set a variable to identify the switch has been pressed.
+   \   000006   F2404800.... MOV.B   #0x48, &SW2_press
+     36          		SW2_debounce = HIGH; // Set a variable to identify the switch is being debounced.
+   \   00000C   F2404800.... MOV.B   #0x48, &SW2_debounce
+     37          		SW2_debounce_count = LOW; // Reset the count required of the debounce.
+   \   000012   B2404C00.... MOV.W   #0x4c, &SW2_debounce_count
+     38          		timerB0_2_count = ZERO;
+   \   000018   8243....     MOV.W   #0x0, &timerB0_2_count
+     39          		P2IE &= ~SW2; // Disable the Switch Interrupt.
+   \   00001C   F2C21B02     BIC.B   #0x8, &0x21b
+     40          		TB0CTL |= TBCLR; // Resets TB0R, clock divider, count direction
+   \   000020   A2D28003     BIS.W   #0x4, &0x380
+     41          		//Switch2 function
+     42          			// Use a Timer Value to control the debounce
+     43          			TB0CCTL1 |= CCIE;
+   \   000024   B2D010008403 BIS.W   #0x10, &0x384
+     44          			TB0CCTL2 |= CCIE;
+   \   00002A   B2D010008603 BIS.W   #0x10, &0x386
+     45          	}
+     46          }
+   \                     ??SW2_interrupt_0:
+   \   000030   0013         RETI
+   \   000032                REQUIRE _A_PAIFG_L
+   \   000032                REQUIRE _A_PAIE_L
+   \   000032                REQUIRE _A_TB0CTL_L
+   \   000032                REQUIRE _A_TB0CCTL1_L
+   \   000032                REQUIRE _A_TB0CCTL2_L
+
+   \                                 In  segment INTVEC, offset 0x2c, root
+   \                     `??SW1_interrupt::??INTVEC 44`:
+   \   00002C   ....         DC16    SW1_interrupt
+
+   \                                 In  segment INTVEC, offset 0x30, root
+   \                     `??SW2_interrupt::??INTVEC 48`:
+   \   000030   ....         DC16    SW2_interrupt
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   SW1_interrupt
+      4   SW2_interrupt
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      62  SW1_interrupt
+       2  SW1_interrupt::??INTVEC 44
+      50  SW2_interrupt
+       2  SW2_interrupt::??INTVEC 48
+       2  _A_PAIE_L
+       2  _A_PAIFG_L
+       2  _A_PBIE_L
+       2  _A_PBIFG_L
+       2  _A_TB0CCTL1_L
+       2  _A_TB0CCTL2_L
+       2  _A_TB0CTL_L
+
+ 
+  14 bytes in segment DATA16_AN
+   4 bytes in segment INTVEC
+ 112 bytes in segment ISR_CODE
+ 
+ 112 bytes of CODE  memory
+   0 bytes of CONST memory (+  4 bytes shared)
+   0 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: none

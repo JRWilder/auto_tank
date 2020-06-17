@@ -1,0 +1,240 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           15/Aug/2019  19:18:51
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Line_Detect.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EW59B8.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Line_Detect.c"
+#        -lC "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\Line_Detect.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\Line_Detect.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\Line_Detect.c
+      1          //******************************************************************************
+      2          // File Name: Line_Detect.c
+      3          // Description: This file contains the code for the autonomous car to calibrate
+      4          // its IR detector values for both on white and on the black line.
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          
+     14          ///////////////////////// Line_Detect Operation /////////////////////////
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     15          unsigned int white_read_count = ZERO;
+   \                     white_read_count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          unsigned int left_white_value = ZERO;
+   \                     left_white_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          unsigned int right_white_value = ZERO;
+   \                     right_white_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     18          unsigned int black_read_count = ZERO;
+   \                     black_read_count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     19          unsigned int left_black_value = ZERO;
+   \                     left_black_value:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     20          unsigned int right_black_value = ZERO;
+   \                     right_black_value:
+   \   000000                DS8 2
+     21          
+
+   \                                 In  segment CODE, align 2
+     22          void line_detect(void){
+   \                     line_detect:
+     23          	switch(operation_state){
+   \   000000   1F42....     MOV.W   &operation_state, R15
+   \   000004   0F83         SUB.W   #0x0, R15
+   \   000006   6824         JEQ     ??line_detect_1
+   \   000008   1F83         SUB.W   #0x1, R15
+   \   00000A   0724         JEQ     ??line_detect_5
+   \   00000C   1F83         SUB.W   #0x1, R15
+   \   00000E   1524         JEQ     ??line_detect_6
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   2024         JEQ     ??line_detect_7
+   \   000014   1F83         SUB.W   #0x1, R15
+   \   000016   2B24         JEQ     ??line_detect_8
+   \   000018   5C3C         JMP     ??line_detect_4
+     24          		case ZERO://Setup
+     25          			break;
+     26          		case ONE://Emitter_On
+     27          			P5OUT |= IR_LED;
+   \                     ??line_detect_5:
+   \   00001A   F2D010004202 BIS.B   #0x10, &0x242
+     28          			white_read_count = ZERO;
+   \   000020   8243....     MOV.W   #0x0, &white_read_count
+     29          			left_white_value = ZERO;
+   \   000024   8243....     MOV.W   #0x0, &left_white_value
+     30          			right_white_value = ZERO;
+   \   000028   8243....     MOV.W   #0x0, &right_white_value
+     31          			black_read_count = ZERO;
+   \   00002C   8243....     MOV.W   #0x0, &black_read_count
+     32          			left_black_value = ZERO;
+   \   000030   8243....     MOV.W   #0x0, &left_black_value
+     33          			right_black_value = ZERO;
+   \   000034   8243....     MOV.W   #0x0, &right_black_value
+     34          			break;
+   \   000038   1001         RETA
+     35          		case TWO://White Calibration
+     36          			if(white_read_count < TEN){
+   \                     ??line_detect_6:
+   \   00003A   B2900A00.... CMP.W   #0xa, &white_read_count
+   \   000040   4B2C         JC      ??line_detect_1
+     37          				white_read_count++;
+   \   000042   9253....     ADD.W   #0x1, &white_read_count
+     38          				left_white_value += v_detect_left;
+   \   000046   9252........ ADD.W   &v_detect_left, &left_white_value
+     39          				right_white_value += v_detect_right;
+   \   00004C   9252........ ADD.W   &v_detect_right, &right_white_value
+     40          			}
+     41          			break;
+   \   000052   1001         RETA
+     42          		case THREE://Black Calibration
+     43          			if(black_read_count < TEN){
+   \                     ??line_detect_7:
+   \   000054   B2900A00.... CMP.W   #0xa, &black_read_count
+   \   00005A   3E2C         JC      ??line_detect_1
+     44          				black_read_count++;
+   \   00005C   9253....     ADD.W   #0x1, &black_read_count
+     45          				left_black_value += v_detect_left;
+   \   000060   9252........ ADD.W   &v_detect_left, &left_black_value
+     46          				right_black_value += v_detect_right;
+   \   000066   9252........ ADD.W   &v_detect_right, &right_black_value
+     47          			}
+     48          			break;
+   \   00006C   1001         RETA
+     49          		case FOUR://Emitter Off
+     50          			P5OUT &= ~IR_LED;
+   \                     ??line_detect_8:
+   \   00006E   F2C010004202 BIC.B   #0x10, &0x242
+     51          			left_white_value = left_white_value / white_read_count;
+   \   000074   1C42....     MOV.W   &left_white_value, R12
+   \   000078   1E42....     MOV.W   &white_read_count, R14
+   \   00007C   ........     CALLA   #?DivMod16u
+   \   000080   824C....     MOV.W   R12, &left_white_value
+     52          			right_white_value = right_white_value / white_read_count;
+   \   000084   1C42....     MOV.W   &right_white_value, R12
+   \   000088   1E42....     MOV.W   &white_read_count, R14
+   \   00008C   ........     CALLA   #?DivMod16u
+   \   000090   824C....     MOV.W   R12, &right_white_value
+     53          			left_black_value = left_black_value / black_read_count;
+   \   000094   1C42....     MOV.W   &left_black_value, R12
+   \   000098   1E42....     MOV.W   &black_read_count, R14
+   \   00009C   ........     CALLA   #?DivMod16u
+   \   0000A0   824C....     MOV.W   R12, &left_black_value
+     54          			right_black_value = right_black_value / black_read_count;
+   \   0000A4   1C42....     MOV.W   &right_black_value, R12
+   \   0000A8   1E42....     MOV.W   &black_read_count, R14
+   \   0000AC   ........     CALLA   #?DivMod16u
+   \   0000B0   824C....     MOV.W   R12, &right_black_value
+     55          			left_white_value -= SUBTRACT_VALUE;
+   \   0000B4   B250CEFF.... ADD.W   #0xffce, &left_white_value
+     56          			right_white_value -= SUBTRACT_VALUE;
+   \   0000BA   B250CEFF.... ADD.W   #0xffce, &right_white_value
+     57          			left_black_value -= SUBTRACT_VALUE;
+   \   0000C0   B250CEFF.... ADD.W   #0xffce, &left_black_value
+     58          			right_black_value -= SUBTRACT_VALUE;
+   \   0000C6   B250CEFF.... ADD.W   #0xffce, &right_black_value
+     59          			operation_state++;
+   \   0000CC   9253....     ADD.W   #0x1, &operation_state
+     60          			break;
+   \   0000D0   1001         RETA
+     61          		default:
+     62          			reset_op = HIGH;
+   \                     ??line_detect_4:
+   \   0000D2   F2404800.... MOV.B   #0x48, &reset_op
+     63          			break;
+     64          	}
+     65          }
+   \                     ??line_detect_1:
+   \   0000D8   1001         RETA
+   \   0000DA                REQUIRE _A_PCOUT_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   line_detect
+        4 ?DivMod16u
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_PCOUT_L
+       2  black_read_count
+       2  left_black_value
+       2  left_white_value
+     218  line_detect
+       2  right_black_value
+       2  right_white_value
+       2  white_read_count
+
+ 
+ 218 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+  12 bytes in segment DATA16_Z
+ 
+ 218 bytes of CODE memory
+  12 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

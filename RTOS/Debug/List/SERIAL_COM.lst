@@ -1,0 +1,562 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           16/Jun/2020  19:26:11
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\SERIAL_COM.c
+#    Command line  =  
+#        -f C:\Users\JOHNAT~1\AppData\Local\Temp\EW7DFF.tmp
+#        ("C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\SERIAL_COM.c" -lC
+#        "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List" -o "C:\Users\Johnathan\OneDrive
+#        - North Carolina State University\auto_tank\RTCS\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "D:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ -I "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\include\" -I "C:\Users\Johnathan\OneDrive -
+#        North Carolina State University\auto_tank\RTCS\src\" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List\SERIAL_COM.lst
+#    Object file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\Obj\SERIAL_COM.r43
+#
+###############################################################################
+
+C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\src\SERIAL_COM.c
+      1          //******************************************************************************
+      2          // File Name: SERIAL_COM.c
+      3          // Description: This file contains the code that resets the IoT module and
+      4          // establishes the connection to WiFi while automatically storing the SSID and
+      5          // IP address.
+      6          // Author: Johnathan Wilder
+      7          // Date: May 2019
+      8          // Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      9          //******************************************************************************
+     10          
+     11          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c2
+   \   union <unnamed> _A_TB1CCTL0_L
+   \                     _A_TB1CCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x506
+   \   union <unnamed> _A_UCA0BRW_L
+   \                     _A_UCA0BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x508
+   \   union <unnamed> _A_UCA0MCTLW_L
+   \                     _A_UCA0MCTLW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x51a
+   \   union <unnamed> _A_UCA0IE_L
+   \                     _A_UCA0IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x586
+   \   union <unnamed> _A_UCA1BRW_L
+   \                     _A_UCA1BRW_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x588
+   \   union <unnamed> _A_UCA1MCTLW_L
+   \                     _A_UCA1MCTLW_L:
+   \   000000                DS8 2
+     12          #include "Functions.h"
+     13          #include "Macros.h"
+     14          #include "Ports.h"
+     15          #include "SERIAL_COM.h"
+     16          
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     17          char command1[THREE] = "AT\r";
+   \                     command1:
+   \   000000                DS8 3
+   \   000003                REQUIRE `?<Initializer for command1>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     18          char command2[TWENTY] = "AT+WSYNCINTRL=65535\r";
+   \                     command2:
+   \   000000                DS8 20
+   \   000014                REQUIRE `?<Initializer for command2>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     19          char command3[TWENTY_ONE] = "AT+PING=Google.com,3\r";
+   \                     command3:
+   \   000000                DS8 21
+   \   000015                REQUIRE `?<Initializer for command3>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     20          char command4[SIXTEEN] = "AT+NSTCP=5535,1\r";
+   \                     command4:
+   \   000000                DS8 16
+   \   000010                REQUIRE `?<Initializer for command4>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     21          char command5[ELEVEN] = "AT+NSTAT=?\r";
+   \                     command5:
+   \   000000                DS8 11
+   \   00000B                REQUIRE `?<Initializer for command5>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     22          char SSID_temp[TEN] = "          ";
+   \                     SSID_temp:
+   \   000000                DS8 10
+   \   00000A                REQUIRE `?<Initializer for SSID_temp>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     23          char IP_addr1[TEN] = "          ";
+   \                     IP_addr1:
+   \   000000                DS8 10
+   \   00000A                REQUIRE `?<Initializer for IP_addr1>`
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     24          char IP_addr2[TEN] = "          ";
+   \                     IP_addr2:
+   \   000000                DS8 10
+   \   00000A                REQUIRE `?<Initializer for IP_addr2>`
+     25          
+
+   \                                 In  segment CODE, align 2
+     26          void serial_com(void){
+   \                     serial_com:
+     27          	switch(operation_state){
+   \   000000   1F42....     MOV.W   &operation_state, R15
+   \   000004   0F83         SUB.W   #0x0, R15
+   \   000006   1324         JEQ     ??serial_com_15
+   \   000008   1F83         SUB.W   #0x1, R15
+   \   00000A   2924         JEQ     ??serial_com_16
+   \   00000C   2F82         SUB.W   #0x4, R15
+   \   00000E   2A24         JEQ     ??serial_com_17
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   3B24         JEQ     ??serial_com_18
+   \   000014   1F83         SUB.W   #0x1, R15
+   \   000016   4C24         JEQ     ??serial_com_19
+   \   000018   2F82         SUB.W   #0x4, R15
+   \   00001A   5D24         JEQ     ??serial_com_20
+   \   00001C   1F83         SUB.W   #0x1, R15
+   \   00001E   6E24         JEQ     ??serial_com_21
+   \   000020   1F83         SUB.W   #0x1, R15
+   \   000022   7F24         JEQ     ??serial_com_22
+   \   000024   1F83         SUB.W   #0x1, R15
+   \   000026   8324         JEQ     ??serial_com_23
+   \   000028   1F83         SUB.W   #0x1, R15
+   \   00002A   9824         JEQ     ??serial_com_14
+   \   00002C   1001         RETA
+     28          		case ZERO://Setup
+     29          			if(UCA0BRW != FOUR){
+   \                     ??serial_com_15:
+   \   00002E   A2920605     CMP.W   #0x4, &0x506
+   \   000032   0A24         JEQ     ??serial_com_24
+     30          				UCA0BRW = FOUR;
+   \   000034   A2420605     MOV.W   #0x4, &0x506
+     31          				UCA0MCTLW = BAUD_115_VALUE;
+   \   000038   B24051550805 MOV.W   #0x5551, &0x508
+     32          				UCA1BRW = FOUR;
+   \   00003E   A2428605     MOV.W   #0x4, &0x586
+     33          				UCA1MCTLW = BAUD_115_VALUE;
+   \   000042   B24051558805 MOV.W   #0x5551, &0x588
+     34          			}
+     35          			pwm(OFF);
+   \                     ??serial_com_24:
+   \   000048   3C401600     MOV.W   #0x16, R12
+   \   00004C   ........     CALLA   #pwm
+     36          			if(timerB1_0 != HIGH){
+   \   000050   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   000056   8224         JEQ     ??serial_com_14
+     37          				start_timerB1_0(ONE);
+   \   000058   1C43         MOV.W   #0x1, R12
+   \   00005A   ........     BRA     #start_timerB1_0
+     38          			}
+     39          			break;
+     40          
+     41          		case ONE:
+     42          			P5OUT |= IOT_RESET;
+   \                     ??serial_com_16:
+   \   00005E   D2D34202     BIS.B   #0x1, &0x242
+     43          			break;
+   \   000062   1001         RETA
+     44          
+     45          		case FIVE://Send "AT"
+     46          			if(AT_sent != HIGH){
+   \                     ??serial_com_17:
+   \   000064   F2904800.... CMP.B   #0x48, &AT_sent
+   \   00006A   7824         JEQ     ??serial_com_14
+     47          				for(unsigned int k = ZERO; k<THREE; k++){
+   \   00006C   0F43         MOV.W   #0x0, R15
+   \                     ??serial_com_0:
+   \   00006E   3F900300     CMP.W   #0x3, R15
+   \   000072   052C         JC      ??serial_com_25
+     48          					IOT_Tx[k] = command1[k];
+   \   000074   DF4F........ MOV.B   command1(R15), IOT_Tx(R15)
+     49          				}
+   \   00007A   1F53         ADD.W   #0x1, R15
+   \   00007C   F83F         JMP     ??serial_com_0
+     50          				IOT_transmit();
+   \                     ??serial_com_25:
+   \   00007E   ........     CALLA   #IOT_transmit
+     51          				AT_sent = HIGH;
+   \   000082   F2404800.... MOV.B   #0x48, &AT_sent
+     52          			}
+     53          			break;
+   \   000088   1001         RETA
+     54          
+     55          		case SIX://Send "AT+WSYNCINTRL=65535"
+     56          			if(WSYN_sent != HIGH){
+   \                     ??serial_com_18:
+   \   00008A   F2904800.... CMP.B   #0x48, &WSYN_sent
+   \   000090   6524         JEQ     ??serial_com_14
+     57          				for(unsigned int k = ZERO; k<TWENTY; k++){
+   \   000092   0F43         MOV.W   #0x0, R15
+   \                     ??serial_com_1:
+   \   000094   3F901400     CMP.W   #0x14, R15
+   \   000098   052C         JC      ??serial_com_26
+     58          					IOT_Tx[k] = command2[k];
+   \   00009A   DF4F........ MOV.B   command2(R15), IOT_Tx(R15)
+     59          				}
+   \   0000A0   1F53         ADD.W   #0x1, R15
+   \   0000A2   F83F         JMP     ??serial_com_1
+     60          				IOT_transmit();
+   \                     ??serial_com_26:
+   \   0000A4   ........     CALLA   #IOT_transmit
+     61          				WSYN_sent = HIGH;
+   \   0000A8   F2404800.... MOV.B   #0x48, &WSYN_sent
+     62          			}
+     63          			break;
+   \   0000AE   1001         RETA
+     64          
+     65          		case SEVEN://Send "AT+PING=Google.com,1\r"
+     66          			if(PING_sent != HIGH){
+   \                     ??serial_com_19:
+   \   0000B0   F2904800.... CMP.B   #0x48, &PING_sent
+   \   0000B6   5224         JEQ     ??serial_com_14
+     67          				for(unsigned int k=ZERO; k<TWENTY_ONE; k++){
+   \   0000B8   0F43         MOV.W   #0x0, R15
+   \                     ??serial_com_2:
+   \   0000BA   3F901500     CMP.W   #0x15, R15
+   \   0000BE   052C         JC      ??serial_com_27
+     68          					IOT_Tx[k] = command3[k];
+   \   0000C0   DF4F........ MOV.B   command3(R15), IOT_Tx(R15)
+     69          				}
+   \   0000C6   1F53         ADD.W   #0x1, R15
+   \   0000C8   F83F         JMP     ??serial_com_2
+     70          				IOT_transmit();
+   \                     ??serial_com_27:
+   \   0000CA   ........     CALLA   #IOT_transmit
+     71          				PING_sent = HIGH;
+   \   0000CE   F2404800.... MOV.B   #0x48, &PING_sent
+     72          			}
+     73          			break;
+   \   0000D4   1001         RETA
+     74          
+     75          		case ELEVEN://Send "AT+NSTCP=5535,1"
+     76          			if(NSTC_sent != HIGH){
+   \                     ??serial_com_20:
+   \   0000D6   F2904800.... CMP.B   #0x48, &NSTC_sent
+   \   0000DC   3F24         JEQ     ??serial_com_14
+     77          				for(unsigned int k=ZERO; k<SIXTEEN; k++){
+   \   0000DE   0F43         MOV.W   #0x0, R15
+   \                     ??serial_com_3:
+   \   0000E0   3F901000     CMP.W   #0x10, R15
+   \   0000E4   052C         JC      ??serial_com_28
+     78          					IOT_Tx[k] = command4[k];
+   \   0000E6   DF4F........ MOV.B   command4(R15), IOT_Tx(R15)
+     79          				}
+   \   0000EC   1F53         ADD.W   #0x1, R15
+   \   0000EE   F83F         JMP     ??serial_com_3
+     80          				IOT_transmit();
+   \                     ??serial_com_28:
+   \   0000F0   ........     CALLA   #IOT_transmit
+     81          				NSTC_sent = HIGH;
+   \   0000F4   F2404800.... MOV.B   #0x48, &NSTC_sent
+     82          			}
+     83          			break;
+   \   0000FA   1001         RETA
+     84          
+     85          		case TWELVE://Send "AT+NSTAT=?"
+     86          			if(NSTAT_sent != HIGH){
+   \                     ??serial_com_21:
+   \   0000FC   F2904800.... CMP.B   #0x48, &NSTAT_sent
+   \   000102   2C24         JEQ     ??serial_com_14
+     87          				for(unsigned int k = ZERO; k<ELEVEN; k++){
+   \   000104   0F43         MOV.W   #0x0, R15
+   \                     ??serial_com_4:
+   \   000106   3F900B00     CMP.W   #0xb, R15
+   \   00010A   052C         JC      ??serial_com_29
+     88          					IOT_Tx[k] = command5[k];
+   \   00010C   DF4F........ MOV.B   command5(R15), IOT_Tx(R15)
+     89          				}
+   \   000112   1F53         ADD.W   #0x1, R15
+   \   000114   F83F         JMP     ??serial_com_4
+     90          				IOT_transmit();
+   \                     ??serial_com_29:
+   \   000116   ........     CALLA   #IOT_transmit
+     91          				NSTAT_sent = HIGH;
+   \   00011A   F2404800.... MOV.B   #0x48, &NSTAT_sent
+     92          			}
+     93          			break;
+   \   000120   1001         RETA
+     94          
+     95          		case THIRTEEN://Configure SSID and IP ADDR
+     96          			TB1CCTL0 &= ~CCIE;
+   \                     ??serial_com_22:
+   \   000122   B2C01000C203 BIC.W   #0x10, &0x3c2
+     97          			/*
+     98          			switch(SSID_index){
+     99          				case ONE:
+    100          					for(unsigned int k=FOUR; k<FIVE; k++){
+    101          						SSID_temp[k] = SSid[k-FOUR];
+    102          					}
+    103          					break;
+    104          				case TWO:
+    105          					for(unsigned int k=FOUR; k<SIX; k++){
+    106          						SSID_temp[k] = SSid[k-FOUR];
+    107          					}
+    108          					break;
+    109          				case THREE:
+    110          					for(unsigned int k=THREE; k<SIX; k++){
+    111          						SSID_temp[k] = SSid[k-THREE];
+    112          					}
+    113          					break;
+    114          				case FOUR:
+    115          					for(unsigned int k=THREE; k<SEVEN; k++){
+    116          						SSID_temp[k] = SSid[k-THREE];
+    117          					}
+    118          					break;
+    119          				case FIVE:
+    120          					for(unsigned int k=TWO; k<SEVEN; k++){
+    121          						SSID_temp[k] = SSid[k-TWO];
+    122          					}
+    123          					break;
+    124          				case SIX:
+    125          					for(unsigned int k=TWO; k<EIGHT; k++){
+    126          						SSID_temp[k] = SSid[k-TWO];
+    127          					}
+    128          					break;
+    129          				case SEVEN:
+    130          					for(unsigned int k=ONE; k<EIGHT; k++){
+    131          						SSID_temp[k] = SSid[k-ONE];
+    132          					}
+    133          					break;
+    134          				case EIGHT:
+    135          					for(unsigned int k=ONE; k<NINE; k++){
+    136          						SSID_temp[k] = SSid[k-ONE];
+    137          					}
+    138          					break;
+    139          				case NINE:
+    140          					for(unsigned int k=ZERO; k<NINE; k++){
+    141          						SSID_temp[k] = SSid[k];
+    142          					}
+    143          					break;
+    144          				case TEN:
+    145          					for(unsigned int k=ZERO; k<TEN; k++){
+    146          						SSID_temp[k] = SSid[k];
+    147          					}
+    148          					break;
+    149          				default: break;
+    150          			}
+    151          			*/
+    152          			operation_state++;
+   \   000128   9253....     ADD.W   #0x1, &operation_state
+    153          			break;
+   \   00012C   1001         RETA
+    154          		case FOURTEEN:
+    155          			for(unsigned int k=ONE; k<SEVEN; k++){
+   \                     ??serial_com_23:
+   \   00012E   1F43         MOV.W   #0x1, R15
+   \                     ??serial_com_5:
+   \   000130   3F900700     CMP.W   #0x7, R15
+   \   000134   052C         JC      ??serial_com_30
+    156          				IP_addr1[k+ONE] = IP_addr[k];
+   \   000136   DF4F........ MOV.B   IP_addr(R15), IP_addr1 + 1(R15)
+    157          			}
+   \   00013C   1F53         ADD.W   #0x1, R15
+   \   00013E   F83F         JMP     ??serial_com_5
+    158          			for(unsigned int k=EIGHT; k<FOURTEEN; k++){
+   \                     ??serial_com_30:
+   \   000140   3F42         MOV.W   #0x8, R15
+   \                     ??serial_com_6:
+   \   000142   3F900E00     CMP.W   #0xe, R15
+   \   000146   052C         JC      ??serial_com_31
+    159          				IP_addr2[k-SIX] = IP_addr[k];
+   \   000148   DF4F........ MOV.B   IP_addr(R15), LWRD(IP_addr2 + 65530)(R15)
+    160          			}
+   \   00014E   1F53         ADD.W   #0x1, R15
+   \   000150   F83F         JMP     ??serial_com_6
+    161          			operation = THREE;
+   \                     ??serial_com_31:
+   \   000152   B2400300.... MOV.W   #0x3, &operation
+    162          			operation_state = ZERO;
+   \   000158   8243....     MOV.W   #0x0, &operation_state
+    163          			break;
+    164          		case FIFTEEN:
+    165          
+    166          			break;
+    167          		default: break;
+    168          	}
+    169          }
+   \                     ??serial_com_14:
+   \   00015C   1001         RETA
+   \   00015E                REQUIRE _A_UCA0BRW_L
+   \   00015E                REQUIRE _A_UCA0MCTLW_L
+   \   00015E                REQUIRE _A_UCA1BRW_L
+   \   00015E                REQUIRE _A_UCA1MCTLW_L
+   \   00015E                REQUIRE _A_PCOUT_L
+   \   00015E                REQUIRE _A_TB1CCTL0_L
+    170          
+
+   \                                 In  segment CODE, align 2
+    171          void IOT_transmit(void){
+   \                     IOT_transmit:
+    172          	if(IOT_Tx_rdy != HIGH){
+   \   000000   F2904800.... CMP.B   #0x48, &IOT_Tx_rdy
+   \   000006   0724         JEQ     ??IOT_transmit_0
+    173          		IOT_Tx_rdy = HIGH;
+   \   000008   F2404800.... MOV.B   #0x48, &IOT_Tx_rdy
+    174          		IOT_Tx_index = ZERO;
+   \   00000E   8243....     MOV.W   #0x0, &IOT_Tx_index
+    175          		UCA0IE |= UCTXIE;
+   \   000012   A2D31A05     BIS.W   #0x2, &0x51a
+    176          	}
+    177          }
+   \                     ??IOT_transmit_0:
+   \   000016   1001         RETA
+   \   000018                REQUIRE _A_UCA0IE_L
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for command1>`:
+   \   000000   41540D       DC8 41H, 54H, 0DH
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for command2>`:
+   \   000000   41542B575359 DC8 41H, 54H, 2BH, 57H, 53H, 59H, 4EH, 43H
+   \            4E43        
+   \   000008   494E54524C3D DC8 49H, 4EH, 54H, 52H, 4CH, 3DH, 36H, 35H
+   \            3635        
+   \   000010   3533350D     DC8 35H, 33H, 35H, 0DH
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for command3>`:
+   \   000000   41542B50494E DC8 41H, 54H, 2BH, 50H, 49H, 4EH, 47H, 3DH
+   \            473D        
+   \   000008   476F6F676C65 DC8 47H, 6FH, 6FH, 67H, 6CH, 65H, 2EH, 63H
+   \            2E63        
+   \   000010   6F6D2C330D   DC8 6FH, 6DH, 2CH, 33H, 0DH
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for command4>`:
+   \   000000   41542B4E5354 DC8 41H, 54H, 2BH, 4EH, 53H, 54H, 43H, 50H
+   \            4350        
+   \   000008   3D353533352C DC8 3DH, 35H, 35H, 33H, 35H, 2CH, 31H, 0DH
+   \            310D        
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for command5>`:
+   \   000000   41542B4E5354 DC8 41H, 54H, 2BH, 4EH, 53H, 54H, 41H, 54H
+   \            4154        
+   \   000008   3D3F0D       DC8 3DH, 3FH, 0DH
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for SSID_temp>`:
+   \   000000   202020202020 DC8 20H, 20H, 20H, 20H, 20H, 20H, 20H, 20H
+   \            2020        
+   \   000008   2020         DC8 20H, 20H
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for IP_addr1>`:
+   \   000000   202020202020 DC8 20H, 20H, 20H, 20H, 20H, 20H, 20H, 20H
+   \            2020        
+   \   000008   2020         DC8 20H, 20H
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for IP_addr2>`:
+   \   000000   202020202020 DC8 20H, 20H, 20H, 20H, 20H, 20H, 20H, 20H
+   \            2020        
+   \   000008   2020         DC8 20H, 20H
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   IOT_transmit
+      4   serial_com
+        4   -> IOT_transmit
+        4   -> pwm
+        0   -> start_timerB1_0
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      10  ?<Initializer for IP_addr1>
+      10  ?<Initializer for IP_addr2>
+      10  ?<Initializer for SSID_temp>
+       3  ?<Initializer for command1>
+      20  ?<Initializer for command2>
+      21  ?<Initializer for command3>
+      16  ?<Initializer for command4>
+      11  ?<Initializer for command5>
+      24  IOT_transmit
+      10  IP_addr1
+      10  IP_addr2
+      10  SSID_temp
+       2  _A_PCOUT_L
+       2  _A_TB1CCTL0_L
+       2  _A_UCA0BRW_L
+       2  _A_UCA0IE_L
+       2  _A_UCA0MCTLW_L
+       2  _A_UCA1BRW_L
+       2  _A_UCA1MCTLW_L
+       3  command1
+      20  command2
+      21  command3
+      16  command4
+      11  command5
+     350  serial_com
+
+ 
+ 374 bytes in segment CODE
+  14 bytes in segment DATA16_AN
+ 101 bytes in segment DATA16_I
+ 101 bytes in segment DATA16_ID
+ 
+ 374 bytes of CODE  memory
+ 101 bytes of CONST memory
+ 101 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: none

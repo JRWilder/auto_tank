@@ -1,0 +1,464 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           16/Jun/2020  19:26:11
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\Line_Follow.c
+#    Command line  =  
+#        -f C:\Users\JOHNAT~1\AppData\Local\Temp\EW7D3F.tmp
+#        ("C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\Line_Follow.c" -lC
+#        "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List" -o "C:\Users\Johnathan\OneDrive
+#        - North Carolina State University\auto_tank\RTCS\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "D:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ -I "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\include\" -I "C:\Users\Johnathan\OneDrive -
+#        North Carolina State University\auto_tank\RTCS\src\" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List\Line_Follow.lst
+#    Object file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\Obj\Line_Follow.r43
+#
+###############################################################################
+
+C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\src\Line_Follow.c
+      1          //******************************************************************************
+      2          // File Name: Line_Follow.c
+      3          // Description: This file contains the code the autonomous car to intercept and
+      4          // then follow a black line.
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Compiler: Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x242
+   \   union <unnamed> _A_PCOUT_L
+   \                     _A_PCOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c2
+   \   union <unnamed> _A_TB1CCTL0_L
+   \                     _A_TB1CCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x3c4
+   \   union <unnamed> _A_TB1CCTL1_L
+   \                     _A_TB1CCTL1_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          #include "Ports.h"
+     14          
+     15          ///////////////////////// Line_Follow Operation /////////////////////////
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     16          unsigned int position = ZERO;
+   \                     position:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     17          unsigned int last_position = ZERO;
+   \                     last_position:
+   \   000000                DS8 2
+     18          
+
+   \                                 In  segment CODE, align 2
+     19          void line_follow(void){
+   \                     line_follow:
+     20          	switch(operation_state){
+   \   000000   1F42....     MOV.W   &operation_state, R15
+   \   000004   0F83         SUB.W   #0x0, R15
+   \   000006   7E24         JEQ     ??line_follow_1
+   \   000008   1F83         SUB.W   #0x1, R15
+   \   00000A   1524         JEQ     ??line_follow_8
+   \   00000C   1F83         SUB.W   #0x1, R15
+   \   00000E   1E24         JEQ     ??line_follow_9
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   2324         JEQ     ??line_follow_10
+   \   000014   1F83         SUB.W   #0x1, R15
+   \   000016   7624         JEQ     ??line_follow_1
+   \   000018   1F83         SUB.W   #0x1, R15
+   \   00001A   2124         JEQ     ??line_follow_11
+   \   00001C   1F83         SUB.W   #0x1, R15
+   \   00001E   2124         JEQ     ??line_follow_12
+   \   000020   1F83         SUB.W   #0x1, R15
+   \   000022   2924         JEQ     ??line_follow_13
+   \   000024   1F83         SUB.W   #0x1, R15
+   \   000026   3224         JEQ     ??line_follow_14
+   \   000028   1F83         SUB.W   #0x1, R15
+   \   00002A   3824         JEQ     ??line_follow_15
+   \   00002C   1F83         SUB.W   #0x1, R15
+   \   00002E   4124         JEQ     ??line_follow_16
+   \   000030   1F83         SUB.W   #0x1, R15
+   \   000032   5224         JEQ     ??line_follow_17
+   \   000034   643C         JMP     ??line_follow_7
+     21          		case ZERO://Setup
+     22          			break;
+     23          		case ONE://Intercept Line with Emitter OFF
+     24          			if(timerB1_0 != HIGH){
+   \                     ??line_follow_8:
+   \   000036   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   00003C   0324         JEQ     ??line_follow_18
+     25          				start_timerB1_0(FOUR);
+   \   00003E   2C42         MOV.W   #0x4, R12
+   \   000040   ........     CALLA   #start_timerB1_0
+     26          			}
+     27          			pwm(ARC_LEFT);
+   \                     ??line_follow_18:
+   \   000044   3C401500     MOV.W   #0x15, R12
+   \   000048   ........     BRA     #pwm
+     28          			break;
+     29          		case TWO://Intercept Line with Emitter ON
+     30          			if(timerB1_0 != HIGH){
+   \                     ??line_follow_9:
+   \   00004C   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   000052   5824         JEQ     ??line_follow_1
+     31          				start_timerB1_0(FOUR);
+   \   000054   2C42         MOV.W   #0x4, R12
+   \   000056   ........     BRA     #start_timerB1_0
+     32          			}
+     33          			break;
+     34          		case THREE://Intercept Line with Emitter ON
+     35          			intercept();
+   \                     ??line_follow_10:
+   \   00005A   ........     BRA     #intercept
+     36          			break;
+     37          		case FOUR://Intercept_delay
+     38          			break;
+     39          		case FIVE://Alignment
+     40          			alignment();
+   \                     ??line_follow_11:
+   \   00005E   ........     BRA     #alignment
+     41          			break;
+     42          		case SIX://BL_TRAVEL
+     43          			follow_black();
+   \                     ??line_follow_12:
+   \   000062   ........     CALLA   #follow_black
+     44          			if(timerB1_0 != HIGH){
+   \   000066   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   00006C   4B24         JEQ     ??line_follow_1
+     45          				start_timerB1_0(FOURTEEN);
+   \   00006E   3C400E00     MOV.W   #0xe, R12
+   \   000072   ........     BRA     #start_timerB1_0
+     46          			}
+     47          			break;
+     48          		case SEVEN://Circle Delay
+     49          			pwm(OFF);
+   \                     ??line_follow_13:
+   \   000076   3C401600     MOV.W   #0x16, R12
+   \   00007A   ........     CALLA   #pwm
+     50          			if(timerB1_0 != HIGH){
+   \   00007E   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   000084   3F24         JEQ     ??line_follow_1
+     51          				start_timerB1_0(FOUR);
+   \   000086   2C42         MOV.W   #0x4, R12
+   \   000088   ........     BRA     #start_timerB1_0
+     52          			}
+     53          			break;
+     54          		case EIGHT://BL_CIRCLE
+     55          			TB1CCTL0 &= ~CCIE;
+   \                     ??line_follow_14:
+   \   00008C   B2C01000C203 BIC.W   #0x10, &0x3c2
+     56          			TB1CCTL1 &= ~CCIE;
+   \   000092   B2C01000C403 BIC.W   #0x10, &0x3c4
+     57          			follow_black();
+   \   000098   ........     BRA     #follow_black
+     58          			break;
+     59          		case NINE://BL_EXIT
+     60          			if(timerB1_0 != HIGH){
+   \                     ??line_follow_15:
+   \   00009C   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   0000A2   3024         JEQ     ??line_follow_1
+     61          				pwm(STRAIGHT);
+   \   0000A4   1C43         MOV.W   #0x1, R12
+   \   0000A6   ........     CALLA   #pwm
+     62          				start_timerB1_0(SIX);
+   \   0000AA   3C400600     MOV.W   #0x6, R12
+   \   0000AE   ........     BRA     #start_timerB1_0
+     63          			}
+     64          			break;
+     65          		case TEN://BL_DONE
+     66          				pwm(OFF);
+   \                     ??line_follow_16:
+   \   0000B2   3C401600     MOV.W   #0x16, R12
+   \   0000B6   ........     CALLA   #pwm
+     67          				P5OUT &= ~IR_LED;
+   \   0000BA   F2C010004202 BIC.B   #0x10, &0x242
+     68          				TB1CCTL1 &= ~CCIE;
+   \   0000C0   B2C01000C403 BIC.W   #0x10, &0x3c4
+     69          				string_copy(ZERO,  " BL_STOP  ");
+   \   0000C6   3D40....     MOV.W   #`?<Constant " BL_STOP  ">`, R13
+   \   0000CA   0C43         MOV.W   #0x0, R12
+   \   0000CC   ........     CALLA   #string_copy
+     70          				display_changed = HIGH;
+   \   0000D0   F2404800.... MOV.B   #0x48, &display_changed
+     71          			break;
+   \   0000D6   1001         RETA
+     72          		case ELEVEN:
+     73          			pwm(OFF);
+   \                     ??line_follow_17:
+   \   0000D8   3C401600     MOV.W   #0x16, R12
+   \   0000DC   ........     CALLA   #pwm
+     74          			P5OUT &= ~IR_LED;
+   \   0000E0   F2C010004202 BIC.B   #0x10, &0x242
+     75          			TB1CCTL1 &= ~CCIE;
+   \   0000E6   B2C01000C403 BIC.W   #0x10, &0x3c4
+     76          			string_copy(ZERO,  " BL_STOP  ");
+   \   0000EC   3D40....     MOV.W   #`?<Constant " BL_STOP  ">`, R13
+   \   0000F0   0C43         MOV.W   #0x0, R12
+   \   0000F2   ........     CALLA   #string_copy
+     77          			display_changed = HIGH;
+   \   0000F6   F2404800.... MOV.B   #0x48, &display_changed
+     78          			break;
+   \   0000FC   1001         RETA
+     79          		default:
+     80          			reset_op = HIGH;
+   \                     ??line_follow_7:
+   \   0000FE   F2404800.... MOV.B   #0x48, &reset_op
+     81          			break;
+     82          	}
+     83          }
+   \                     ??line_follow_1:
+   \   000104   1001         RETA
+   \   000106                REQUIRE _A_TB1CCTL0_L
+   \   000106                REQUIRE _A_TB1CCTL1_L
+   \   000106                REQUIRE _A_PCOUT_L
+     84          
+
+   \                                 In  segment CODE, align 2
+     85          void intercept(void){
+   \                     intercept:
+     86          	pwm(STRAIGHT);
+   \   000000   1C43         MOV.W   #0x1, R12
+   \   000002   ........     CALLA   #pwm
+     87          	if((v_detect_left >= left_black_value) || (v_detect_right >= right_black_value)){
+   \   000006   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   00000C   042C         JC      ??intercept_0
+   \   00000E   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   000014   0D28         JNC     ??intercept_1
+     88          		pwm(OFF);
+   \                     ??intercept_0:
+   \   000016   3C401600     MOV.W   #0x16, R12
+   \   00001A   ........     CALLA   #pwm
+     89          		operation_state++;
+   \   00001E   9253....     ADD.W   #0x1, &operation_state
+     90          		if(timerB1_0 != HIGH){
+   \   000022   F2904800.... CMP.B   #0x48, &timerB1_0
+   \   000028   0324         JEQ     ??intercept_1
+     91          			start_timerB1_0(FOUR);
+   \   00002A   2C42         MOV.W   #0x4, R12
+   \   00002C   ........     CALLA   #start_timerB1_0
+     92          		}
+     93          	}
+     94          }
+   \                     ??intercept_1:
+   \   000030   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     95          void alignment(void){
+   \                     alignment:
+     96          	pwm(CLOCKWISE);
+   \   000000   3C400500     MOV.W   #0x5, R12
+   \   000004   ........     CALLA   #pwm
+     97          	if((v_detect_left >= left_black_value) && (v_detect_right >= right_black_value)){
+   \   000008   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   00000E   0A28         JNC     ??alignment_0
+   \   000010   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   000016   0628         JNC     ??alignment_0
+     98          		pwm(OFF);
+   \   000018   3C401600     MOV.W   #0x16, R12
+   \   00001C   ........     CALLA   #pwm
+     99          		operation_state++;
+   \   000020   9253....     ADD.W   #0x1, &operation_state
+    100          	}
+    101          }
+   \                     ??alignment_0:
+   \   000024   1001         RETA
+
+   \                                 In  segment CODE, align 2
+    102          void check_position(void){
+   \                     check_position:
+    103          	if((v_detect_left >= left_black_value) && (v_detect_right >= right_black_value)){
+   \   000000   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   000006   0628         JNC     ??check_position_0
+   \   000008   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   00000E   0228         JNC     ??check_position_0
+    104          		position = ZERO;
+   \   000010   8243....     MOV.W   #0x0, &position
+    105          	}
+    106          	if((v_detect_left < left_black_value) && (v_detect_right >= right_black_value)){
+   \                     ??check_position_0:
+   \   000014   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   00001A   062C         JC      ??check_position_1
+   \   00001C   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   000022   0228         JNC     ??check_position_1
+    107          		position = ONE;
+   \   000024   9243....     MOV.W   #0x1, &position
+    108          	}
+    109          	if((v_detect_left >= left_black_value) && (v_detect_right < right_black_value)){
+   \                     ??check_position_1:
+   \   000028   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   00002E   0628         JNC     ??check_position_2
+   \   000030   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   000036   022C         JC      ??check_position_2
+    110          		position = TWO;
+   \   000038   A243....     MOV.W   #0x2, &position
+    111          	}
+    112          	if((v_detect_left < left_black_value) && (v_detect_right < right_black_value)){
+   \                     ??check_position_2:
+   \   00003C   9292........ CMP.W   &left_black_value, &v_detect_left
+   \   000042   072C         JC      ??check_position_3
+   \   000044   9292........ CMP.W   &right_black_value, &v_detect_right
+   \   00004A   032C         JC      ??check_position_3
+    113          		position = THREE;
+   \   00004C   B2400300.... MOV.W   #0x3, &position
+    114          	}
+    115          }
+   \                     ??check_position_3:
+   \   000052   1001         RETA
+
+   \                                 In  segment CODE, align 2
+    116          void follow_black(void){
+   \                     follow_black:
+    117          	check_position();
+   \   000000   ........     CALLA   #check_position
+    118          	switch(position){
+   \   000004   1F42....     MOV.W   &position, R15
+   \   000008   0F83         SUB.W   #0x0, R15
+   \   00000A   0724         JEQ     ??follow_black_1
+   \   00000C   1F83         SUB.W   #0x1, R15
+   \   00000E   0A24         JEQ     ??follow_black_2
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   0E24         JEQ     ??follow_black_3
+   \   000014   1F83         SUB.W   #0x1, R15
+   \   000016   1224         JEQ     ??follow_black_4
+   \   000018   1001         RETA
+    119          		case ZERO://Middle of Black
+    120          			last_position = ZERO;
+   \                     ??follow_black_1:
+   \   00001A   8243....     MOV.W   #0x0, &last_position
+    121          			pwm(STRAIGHT);
+   \   00001E   1C43         MOV.W   #0x1, R12
+   \   000020   ........     BRA     #pwm
+    122          			break;
+    123          		case ONE://Left of Middle
+    124          			last_position = ONE;
+   \                     ??follow_black_2:
+   \   000024   9243....     MOV.W   #0x1, &last_position
+    125          			pwm(CORRECT_LEFT);
+   \   000028   3C400900     MOV.W   #0x9, R12
+   \   00002C   ........     BRA     #pwm
+    126          			break;
+    127          		case TWO://Right of Middle
+    128          			last_position = TWO;
+   \                     ??follow_black_3:
+   \   000030   A243....     MOV.W   #0x2, &last_position
+    129          			pwm(CORRECT_RIGHT);
+   \   000034   3C401100     MOV.W   #0x11, R12
+   \   000038   ........     BRA     #pwm
+    130          			break;
+    131          		case THREE://Off of Black
+    132          			if(last_position == ONE){
+   \                     ??follow_black_4:
+   \   00003C   9293....     CMP.W   #0x1, &last_position
+   \   000040   0420         JNE     ??follow_black_5
+    133          				pwm(CLOCKWISE);
+   \   000042   3C400500     MOV.W   #0x5, R12
+   \   000046   ........     CALLA   #pwm
+    134          			}
+    135          			if(last_position == TWO){
+   \                     ??follow_black_5:
+   \   00004A   A293....     CMP.W   #0x2, &last_position
+   \   00004E   0420         JNE     ??follow_black_0
+    136          				pwm(COUNTER_CLOCKWISE);
+   \   000050   3C400700     MOV.W   #0x7, R12
+   \   000054   ........     CALLA   #pwm
+    137          			}
+    138          			break;
+    139          	}
+    140          }
+   \                     ??follow_black_0:
+   \   000058   1001         RETA
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant " BL_STOP  ">`:
+   \   000000   20424C5F5354 DC8 " BL_STOP  "
+   \            4F50202000  
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   alignment
+        4   -> pwm
+      4   check_position
+      4   follow_black
+        4   -> check_position
+        0   -> pwm
+        4   -> pwm
+      4   intercept
+        4   -> pwm
+        4   -> start_timerB1_0
+      4   line_follow
+        0   -> alignment
+        0   -> follow_black
+        4   -> follow_black
+        0   -> intercept
+        0   -> pwm
+        4   -> pwm
+        0   -> start_timerB1_0
+        4   -> start_timerB1_0
+        4   -> string_copy
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ?<Constant " BL_STOP  ">
+       2  _A_PCOUT_L
+       2  _A_TB1CCTL0_L
+       2  _A_TB1CCTL1_L
+      38  alignment
+      84  check_position
+      90  follow_black
+      50  intercept
+       2  last_position
+     262  line_follow
+       2  position
+
+ 
+ 524 bytes in segment CODE
+   6 bytes in segment DATA16_AN
+  11 bytes in segment DATA16_C
+   4 bytes in segment DATA16_Z
+ 
+ 524 bytes of CODE  memory
+  11 bytes of CONST memory
+   4 bytes of DATA  memory (+ 6 bytes shared)
+
+Errors: none
+Warnings: none

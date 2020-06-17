@@ -1,0 +1,430 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           13/Aug/2019  19:00:44
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Serial_ISR.c
+#    Command line  =  
+#        -f C:\Users\jrwilde2\AppData\Local\Temp\EWB887.tmp
+#        ("C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Serial_ISR.c"
+#        -lC "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List" -o
+#        "C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj"
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\List\Serial_ISR.lst
+#    Object file   =  
+#        C:\Users\jrwilde2\OneDrive - North Carolina State
+#        University\Spring_2019\ECE_306\Projects\Project10\Code\Debug\Obj\Serial_ISR.r43
+#
+###############################################################################
+
+C:\Users\jrwilde2\OneDrive - North Carolina State University\Spring_2019\ECE_306\Projects\Project10\Code\Serial_ISR.c
+      1          //******************************************************************************
+      2          // File Name: Serial_ISR.c
+      3          // Description: This file contains the code that handles the ISR's for both
+      4          // serial ports UCA0, and UCA1
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x50c
+   \   union <unnamed> _A_UCA0RXBUF_L
+   \                     _A_UCA0RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x50e
+   \   union <unnamed> _A_UCA0TXBUF_L
+   \                     _A_UCA0TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x51a
+   \   union <unnamed> _A_UCA0IE_L
+   \                     _A_UCA0IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x51e
+   \   union <unnamed> _A_UCA0IV_L
+   \                     _A_UCA0IV_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x58c
+   \   union <unnamed> _A_UCA1RXBUF_L
+   \                     _A_UCA1RXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x58e
+   \   union <unnamed> _A_UCA1TXBUF_L
+   \                     _A_UCA1TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x59e
+   \   union <unnamed> _A_UCA1IV_L
+   \                     _A_UCA1IV_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          
+     14          #pragma vector=EUSCI_A0_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     15          __interrupt void eUSCI_A0_ISR(void){
+   \                     eUSCI_A0_ISR:
+   \   000000   3F15         PUSHM.W #0x4, R15
+     16          	switch(__even_in_range(UCA0IV,EIGHT)){
+   \   000002   1F421E05     MOV.W   &0x51e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for eUSCI_A0_ISR>_0`:
+   \   000008   C13C         JMP     ??eUSCI_A0_ISR_2
+   \   00000A   033C         JMP     ??eUSCI_A0_ISR_17
+   \   00000C   A43C         JMP     ??eUSCI_A0_ISR_18
+   \   00000E   BE3C         JMP     ??eUSCI_A0_ISR_2
+   \   000010   BD3C         JMP     ??eUSCI_A0_ISR_2
+     17          		case ZERO: // Vector 0 - no interrupt
+     18          			break;
+     19          		case TWO://IOT_Rx
+     20          			//SSID
+     21          			if(NSTAT_sent == HIGH){
+   \                     ??eUSCI_A0_ISR_17:
+   \   000012   F2904800.... CMP.B   #0x48, &NSTAT_sent
+   \   000018   3820         JNE     ??eUSCI_A0_ISR_4
+     22          				if(SSID_rdy == HIGH){
+   \   00001A   F2904800.... CMP.B   #0x48, &SSID_rdy
+   \   000020   1120         JNE     ??eUSCI_A0_ISR_7
+     23          					if(UCA0RXBUF != '"'){
+   \   000022   B29022000C05 CMP.W   #0x22, &0x50c
+   \   000028   0924         JEQ     ??eUSCI_A0_ISR_8
+     24          						SSid[SSID_index] = UCA0RXBUF;
+   \   00002A   1E420C05     MOV.W   &0x50c, R14
+   \   00002E   1F42....     MOV.W   &SSID_index, R15
+   \   000032   CF4E....     MOV.B   R14, SSid(R15)
+     25          						SSID_index++;
+   \   000036   9253....     ADD.W   #0x1, &SSID_index
+   \   00003A   0B3C         JMP     ??eUSCI_A0_ISR_3
+     26          					}else{
+     27          						SSID_rdy = LOW;
+   \                     ??eUSCI_A0_ISR_8:
+   \   00003C   F2404C00.... MOV.B   #0x4c, &SSID_rdy
+   \   000042   073C         JMP     ??eUSCI_A0_ISR_3
+     28          					}
+     29          				}else{
+     30          						if(UCA0RXBUF == '"'){
+   \                     ??eUSCI_A0_ISR_7:
+   \   000044   B29022000C05 CMP.W   #0x22, &0x50c
+   \   00004A   0320         JNE     ??eUSCI_A0_ISR_3
+     31          							SSID_rdy = HIGH;
+   \   00004C   F2404800.... MOV.B   #0x48, &SSID_rdy
+     32          						}
+     33          				}
+     34          				//IP_ADDR
+     35          				if(IP_ADDR_rdy == HIGH){
+   \                     ??eUSCI_A0_ISR_3:
+   \   000052   F2904800.... CMP.B   #0x48, &IP_ADDR_rdy
+   \   000058   1120         JNE     ??eUSCI_A0_ISR_9
+     36          					if(UCA0RXBUF != ' '){
+   \   00005A   B29020000C05 CMP.W   #0x20, &0x50c
+   \   000060   0924         JEQ     ??eUSCI_A0_ISR_10
+     37          						IP_addr[IP_ADDR_index] = UCA0RXBUF;
+   \   000062   1E420C05     MOV.W   &0x50c, R14
+   \   000066   1F42....     MOV.W   &IP_ADDR_index, R15
+   \   00006A   CF4E....     MOV.B   R14, IP_addr(R15)
+     38          						IP_ADDR_index++;
+   \   00006E   9253....     ADD.W   #0x1, &IP_ADDR_index
+   \   000072   0B3C         JMP     ??eUSCI_A0_ISR_4
+     39          					}else{
+     40          						IP_ADDR_rdy = LOW;
+   \                     ??eUSCI_A0_ISR_10:
+   \   000074   F2404C00.... MOV.B   #0x4c, &IP_ADDR_rdy
+   \   00007A   073C         JMP     ??eUSCI_A0_ISR_4
+     41          					}
+     42          				}else{
+     43          					if(UCA0RXBUF == 'r'){
+   \                     ??eUSCI_A0_ISR_9:
+   \   00007C   B29072000C05 CMP.W   #0x72, &0x50c
+   \   000082   0320         JNE     ??eUSCI_A0_ISR_4
+     44          						IP_ADDR_rdy = HIGH;
+   \   000084   F2404800.... MOV.B   #0x48, &IP_ADDR_rdy
+     45          					}
+     46          				}
+     47          			}
+     48          			//Command
+     49          			if(command_rdy == HIGH){
+   \                     ??eUSCI_A0_ISR_4:
+   \   00008A   F2904800.... CMP.B   #0x48, &command_rdy
+   \   000090   1C20         JNE     ??eUSCI_A0_ISR_11
+     50          					command[command_index] = UCA0RXBUF;
+   \   000092   1E420C05     MOV.W   &0x50c, R14
+   \   000096   1F42....     MOV.W   &command_index, R15
+   \   00009A   CF4E....     MOV.B   R14, command(R15)
+     51          					command_index++;
+   \   00009E   9253....     ADD.W   #0x1, &command_index
+     52          					if((command_index>= THIRTY_TWO) || (UCA0RXBUF == END_SIGNAL)){
+   \   0000A2   B2901A00.... CMP.W   #0x1a, &command_index
+   \   0000A8   042C         JC      ??eUSCI_A0_ISR_12
+   \   0000AA   B2900D000C05 CMP.W   #0xd, &0x50c
+   \   0000B0   1320         JNE     ??eUSCI_A0_ISR_5
+     53          						command_index = ZERO;
+   \                     ??eUSCI_A0_ISR_12:
+   \   0000B2   8243....     MOV.W   #0x0, &command_index
+     54          						command_rdy = LOW;
+   \   0000B6   F2404C00.... MOV.B   #0x4c, &command_rdy
+     55          						operation = THREE;
+   \   0000BC   B2400300.... MOV.W   #0x3, &operation
+     56          						operation_state = THREE;
+   \   0000C2   B2400300.... MOV.W   #0x3, &operation_state
+   \   0000C8   073C         JMP     ??eUSCI_A0_ISR_5
+     57          					}
+     58          			}else{
+     59          				if(UCA0RXBUF == START_SIGNAL){
+   \                     ??eUSCI_A0_ISR_11:
+   \   0000CA   B29021000C05 CMP.W   #0x21, &0x50c
+   \   0000D0   0320         JNE     ??eUSCI_A0_ISR_5
+     60          					command_rdy = HIGH;
+   \   0000D2   F2404800.... MOV.B   #0x48, &command_rdy
+     61          				}
+     62          			}
+     63          
+     64          			if(diss_event_rdy == HIGH){
+   \                     ??eUSCI_A0_ISR_5:
+   \   0000D8   F2904800.... CMP.B   #0x48, &diss_event_rdy
+   \   0000DE   1E20         JNE     ??eUSCI_A0_ISR_13
+     65          				diss_event[diss_index] = UCA0RXBUF;
+   \   0000E0   1E420C05     MOV.W   &0x50c, R14
+   \   0000E4   1F42....     MOV.W   &diss_index, R15
+   \   0000E8   CF4E....     MOV.B   R14, diss_event(R15)
+     66          				diss_index++;
+   \   0000EC   9253....     ADD.W   #0x1, &diss_index
+     67          				if(diss_index>=FOURTEEN){
+   \   0000F0   B2900E00.... CMP.W   #0xe, &diss_index
+   \   0000F6   1928         JNC     ??eUSCI_A0_ISR_6
+     68          					if(strcmp(diss_event, "Disassociation") == 0){
+                 					   ^
+Warning[Pe223]: function "strcmp" declared implicitly
+   \   0000F8   3D40....     MOV.W   #`?<Constant "Disassociation">`, R13
+   \   0000FC   3C40....     MOV.W   #diss_event, R12
+   \   000100   ........     CALLA   #strcmp
+   \   000104   0C93         CMP.W   #0x0, R12
+   \   000106   0420         JNE     ??eUSCI_A0_ISR_14
+     69          						operation = FOUR;
+   \   000108   A242....     MOV.W   #0x4, &operation
+     70          						operation_state = ZERO;
+   \   00010C   8243....     MOV.W   #0x0, &operation_state
+     71          					}
+     72          					diss_index = ZERO;
+   \                     ??eUSCI_A0_ISR_14:
+   \   000110   8243....     MOV.W   #0x0, &diss_index
+     73          					diss_event_rdy = LOW;
+   \   000114   F2404C00.... MOV.B   #0x4c, &diss_event_rdy
+   \   00011A   073C         JMP     ??eUSCI_A0_ISR_6
+     74          				}
+     75          			}else{
+     76          				if(UCA0RXBUF == 'D'){
+   \                     ??eUSCI_A0_ISR_13:
+   \   00011C   B29044000C05 CMP.W   #0x44, &0x50c
+   \   000122   0320         JNE     ??eUSCI_A0_ISR_6
+     77          					diss_event_rdy = HIGH;
+   \   000124   F2404800.... MOV.B   #0x48, &diss_event_rdy
+     78          				}
+     79          			}
+     80          			IOT_Rx[IOT_Rx_index] = UCA0RXBUF;
+   \                     ??eUSCI_A0_ISR_6:
+   \   00012A   1E420C05     MOV.W   &0x50c, R14
+   \   00012E   1F42....     MOV.W   &IOT_Rx_index, R15
+   \   000132   CF4E....     MOV.B   R14, IOT_Rx(R15)
+     81          			UCA1TXBUF = IOT_Rx[IOT_Rx_index];
+   \   000136   1F42....     MOV.W   &IOT_Rx_index, R15
+   \   00013A   5F4F....     MOV.B   IOT_Rx(R15), R15
+   \   00013E   4F4F         MOV.B   R15, R15
+   \   000140   824F8E05     MOV.W   R15, &0x58e
+     82          			IOT_Rx_index++;
+   \   000144   9253....     ADD.W   #0x1, &IOT_Rx_index
+     83          			if(IOT_Rx_index >= SIXTY_FOUR){
+   \   000148   B290C000.... CMP.W   #0xc0, &IOT_Rx_index
+   \   00014E   1E28         JNC     ??eUSCI_A0_ISR_2
+     84          				IOT_Rx_index = ZERO;
+   \   000150   8243....     MOV.W   #0x0, &IOT_Rx_index
+     85          			}
+     86          			break;
+   \   000154   1B3C         JMP     ??eUSCI_A0_ISR_2
+     87          		case FOUR://IOT_Tx
+     88          			if(IOT_Tx_rdy == HIGH){
+   \                     ??eUSCI_A0_ISR_18:
+   \   000156   F2904800.... CMP.B   #0x48, &IOT_Tx_rdy
+   \   00015C   1720         JNE     ??eUSCI_A0_ISR_2
+     89          				UCA0TXBUF = IOT_Tx[IOT_Tx_index];
+   \   00015E   1F42....     MOV.W   &IOT_Tx_index, R15
+   \   000162   5F4F....     MOV.B   IOT_Tx(R15), R15
+   \   000166   4F4F         MOV.B   R15, R15
+   \   000168   824F0E05     MOV.W   R15, &0x50e
+     90          				if(IOT_Tx[IOT_Tx_index] == END_SIGNAL){
+   \   00016C   1F42....     MOV.W   &IOT_Tx_index, R15
+   \   000170   FF900D00.... CMP.B   #0xd, IOT_Tx(R15)
+   \   000176   0220         JNE     ??eUSCI_A0_ISR_15
+     91          					UCA0IE &= ~UCTXIE;
+   \   000178   A2C31A05     BIC.W   #0x2, &0x51a
+     92          				}
+     93          				if(IOT_Tx_index >= THIRTY_TWO){
+   \                     ??eUSCI_A0_ISR_15:
+   \   00017C   B2901A00.... CMP.W   #0x1a, &IOT_Tx_index
+   \   000182   0228         JNC     ??eUSCI_A0_ISR_16
+     94          					IOT_Tx_index = ZERO;
+   \   000184   8243....     MOV.W   #0x0, &IOT_Tx_index
+     95          				}
+     96          				IOT_Tx_index++;
+   \                     ??eUSCI_A0_ISR_16:
+   \   000188   9253....     ADD.W   #0x1, &IOT_Tx_index
+     97          			}
+     98          			break;
+     99          		default: break;
+    100          	}
+    101          }
+   \                     ??eUSCI_A0_ISR_2:
+   \   00018C   3C17         POPM.W  #0x4, R15
+   \   00018E   0013         RETI
+   \   000190                REQUIRE _A_UCA0RXBUF_L
+   \   000190                REQUIRE _A_UCA1TXBUF_L
+   \   000190                REQUIRE _A_UCA0TXBUF_L
+   \   000190                REQUIRE _A_UCA0IE_L
+   \   000190                REQUIRE _A_UCA0IV_L
+    102          
+    103          #pragma vector=EUSCI_A1_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+    104          __interrupt void eUSCI_A1_ISR(void){
+   \                     eUSCI_A1_ISR:
+   \   000000   1F15         PUSHM.W #0x2, R15
+    105          	switch(__even_in_range(UCA1IV,EIGHT)){
+   \   000002   1F429E05     MOV.W   &0x59e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for eUSCI_A1_ISR>_0`:
+   \   000008   2D3C         JMP     ??eUSCI_A1_ISR_2
+   \   00000A   033C         JMP     ??eUSCI_A1_ISR_4
+   \   00000C   1C3C         JMP     ??eUSCI_A1_ISR_5
+   \   00000E   2A3C         JMP     ??eUSCI_A1_ISR_2
+   \   000010   293C         JMP     ??eUSCI_A1_ISR_2
+    106          		case ZERO: // Vector 0 - no interrupt
+    107          			break;
+    108          		case TWO://USB_Rx
+    109          			USB_Rx[USB_Rx_index] = UCA1RXBUF; // RX -> USB_Receive character
+   \                     ??eUSCI_A1_ISR_4:
+   \   000012   1E428C05     MOV.W   &0x58c, R14
+   \   000016   1F42....     MOV.W   &USB_Rx_index, R15
+   \   00001A   CF4E....     MOV.B   R14, USB_Rx(R15)
+    110          			UCA0TXBUF = USB_Rx[USB_Rx_index];
+   \   00001E   1F42....     MOV.W   &USB_Rx_index, R15
+   \   000022   5F4F....     MOV.B   USB_Rx(R15), R15
+   \   000026   4F4F         MOV.B   R15, R15
+   \   000028   824F0E05     MOV.W   R15, &0x50e
+    111          			USB_Rx_index++;
+   \   00002C   9253....     ADD.W   #0x1, &USB_Rx_index
+    112          			if((USB_Rx_index >= THIRTY_TWO) || (UCA1RXBUF == END_SIGNAL)){
+   \   000030   B2901A00.... CMP.W   #0x1a, &USB_Rx_index
+   \   000036   042C         JC      ??eUSCI_A1_ISR_3
+   \   000038   B2900D008C05 CMP.W   #0xd, &0x58c
+   \   00003E   1220         JNE     ??eUSCI_A1_ISR_2
+    113          				USB_Rx_index = ZERO;
+   \                     ??eUSCI_A1_ISR_3:
+   \   000040   8243....     MOV.W   #0x0, &USB_Rx_index
+    114          			}
+    115          			break;
+   \   000044   0F3C         JMP     ??eUSCI_A1_ISR_2
+    116          		case FOUR://USB_Tx
+    117          			UCA1TXBUF = USB_Tx[USB_Tx_index++];
+   \                     ??eUSCI_A1_ISR_5:
+   \   000046   1F42....     MOV.W   &USB_Tx_index, R15
+   \   00004A   5F4F....     MOV.B   USB_Tx(R15), R15
+   \   00004E   9253....     ADD.W   #0x1, &USB_Tx_index
+   \   000052   4F4F         MOV.B   R15, R15
+   \   000054   824F8E05     MOV.W   R15, &0x58e
+    118          			if(USB_Tx_index >= THIRTY_TWO){
+   \   000058   B2901A00.... CMP.W   #0x1a, &USB_Tx_index
+   \   00005E   0228         JNC     ??eUSCI_A1_ISR_2
+    119          				USB_Tx_index = ZERO;
+   \   000060   8243....     MOV.W   #0x0, &USB_Tx_index
+    120          			}
+    121          		break;
+    122          	default: break;
+    123          	}
+    124          }
+   \                     ??eUSCI_A1_ISR_2:
+   \   000064   1E17         POPM.W  #0x2, R15
+   \   000066   0013         RETI
+   \   000068                REQUIRE _A_UCA1RXBUF_L
+   \   000068                REQUIRE _A_UCA0TXBUF_L
+   \   000068                REQUIRE _A_UCA1TXBUF_L
+   \   000068                REQUIRE _A_UCA1IV_L
+
+   \                                 In  segment INTVEC, offset 0x40, root
+   \                     `??eUSCI_A1_ISR::??INTVEC 64`:
+   \   000040   ....         DC16    eUSCI_A1_ISR
+
+   \                                 In  segment INTVEC, offset 0x42, root
+   \                     `??eUSCI_A0_ISR::??INTVEC 66`:
+   \   000042   ....         DC16    eUSCI_A0_ISR
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Disassociation">`:
+   \   000000   446973617373 DC8 "Disassociation"
+   \            6F6369617469
+   \            6F6E00      
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   eUSCI_A0_ISR
+       12   -> strcmp
+      8   eUSCI_A1_ISR
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      15  ?<Constant "Disassociation">
+       2  _A_UCA0IE_L
+       2  _A_UCA0IV_L
+       2  _A_UCA0RXBUF_L
+       2  _A_UCA0TXBUF_L
+       2  _A_UCA1IV_L
+       2  _A_UCA1RXBUF_L
+       2  _A_UCA1TXBUF_L
+     400  eUSCI_A0_ISR
+       2  eUSCI_A0_ISR::??INTVEC 66
+     104  eUSCI_A1_ISR
+       2  eUSCI_A1_ISR::??INTVEC 64
+
+ 
+  14 bytes in segment DATA16_AN
+  15 bytes in segment DATA16_C
+   4 bytes in segment INTVEC
+ 504 bytes in segment ISR_CODE
+ 
+ 504 bytes of CODE  memory
+  15 bytes of CONST memory (+  4 bytes shared)
+   0 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: 1

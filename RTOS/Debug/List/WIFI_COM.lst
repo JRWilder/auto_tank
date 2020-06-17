@@ -1,0 +1,303 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.12.1.987/W32 for MSP430           16/Jun/2020  19:26:11
+# Copyright 1996-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 7.12
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\WIFI_COM.c
+#    Command line  =  
+#        -f C:\Users\JOHNAT~1\AppData\Local\Temp\EW7E4F.tmp
+#        ("C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\src\WIFI_COM.c" -lC
+#        "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List" -o "C:\Users\Johnathan\OneDrive
+#        - North Carolina State University\auto_tank\RTCS\Debug\Obj" --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR2355__ -e --double=32 --dlib_config "D:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.0\430\lib\dlib\dl430xlsfn.h" -I
+#        ./\ -I "C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\include\" -I "C:\Users\Johnathan\OneDrive -
+#        North Carolina State University\auto_tank\RTCS\src\" --core=430X
+#        --data_model=small -On --multiplier=32 --hw_workaround=CPU40
+#        --code_model=large)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\List\WIFI_COM.lst
+#    Object file   =  
+#        C:\Users\Johnathan\OneDrive - North Carolina State
+#        University\auto_tank\RTCS\Debug\Obj\WIFI_COM.r43
+#
+###############################################################################
+
+C:\Users\Johnathan\OneDrive - North Carolina State University\auto_tank\RTCS\src\WIFI_COM.c
+      1          //******************************************************************************
+      2          // File Name: WIFI_COM.c
+      3          // Description: This file contains the code that determines the actions the
+      4          // autonomous car will take when commands are sent over WiFi.
+      5          // Author: Johnathan Wilder
+      6          // Date: May 2019
+      7          // Built with IAR Embedded Workbench Version: V4.10A/W32 (7.11.2)
+      8          //******************************************************************************
+      9          
+     10          #include "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x3c4
+   \   union <unnamed> _A_TB1CCTL1_L
+   \                     _A_TB1CCTL1_L:
+   \   000000                DS8 2
+     11          #include "Functions.h"
+     12          #include "Macros.h"
+     13          
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     14          unsigned int station = ZERO;
+   \                     station:
+   \   000000                DS8 2
+
+   \                                 In  segment CODE, align 2
+     15          void wifi_com(void){
+   \                     wifi_com:
+     16          	switch(operation_state){
+   \   000000   1F42....     MOV.W   &operation_state, R15
+   \   000004   0F83         SUB.W   #0x0, R15
+   \   000006   8F24         JEQ     ??wifi_com_0
+   \   000008   1F83         SUB.W   #0x1, R15
+   \   00000A   8D24         JEQ     ??wifi_com_0
+   \   00000C   1F83         SUB.W   #0x1, R15
+   \   00000E   8B24         JEQ     ??wifi_com_0
+   \   000010   1F83         SUB.W   #0x1, R15
+   \   000012   8920         JNE     ??wifi_com_0
+     17          		case ZERO://Waitting for Command
+     18          			break;
+     19          		case ONE:
+     20          			break;
+     21          		case TWO:
+     22          			break;
+     23          		case THREE:
+     24          			if((command[command_index]=='0') && (command[command_index+ONE]=='4') && (command[command_index+TWO]=='1') &&(command[command_index+THREE]=='5')){
+   \   000014   1F42....     MOV.W   &command_index, R15
+   \   000018   FF903000.... CMP.B   #0x30, command(R15)
+   \   00001E   8320         JNE     ??wifi_com_0
+   \   000020   1F42....     MOV.W   &command_index, R15
+   \   000024   FF903400.... CMP.B   #0x34, command + 1(R15)
+   \   00002A   7D20         JNE     ??wifi_com_0
+   \   00002C   1F42....     MOV.W   &command_index, R15
+   \   000030   FF903100.... CMP.B   #0x31, command + 2(R15)
+   \   000036   7720         JNE     ??wifi_com_0
+   \   000038   1F42....     MOV.W   &command_index, R15
+   \   00003C   FF903500.... CMP.B   #0x35, command + 3(R15)
+   \   000042   7120         JNE     ??wifi_com_0
+     25          				switch(command[command_index+FOUR]){
+   \   000044   1F42....     MOV.W   &command_index, R15
+   \   000048   5E4F....     MOV.B   command + 4(R15), R14
+   \   00004C   7E804100     SUB.B   #0x41, R14
+   \   000050   3424         JEQ     ??wifi_com_7
+   \   000052   7E800300     SUB.B   #0x3, R14
+   \   000056   2A24         JEQ     ??wifi_com_8
+   \   000058   5E83         SUB.B   #0x1, R14
+   \   00005A   3D24         JEQ     ??wifi_com_9
+   \   00005C   6E83         SUB.B   #0x2, R14
+   \   00005E   4724         JEQ     ??wifi_com_10
+   \   000060   7E800600     SUB.B   #0x6, R14
+   \   000064   5A24         JEQ     ??wifi_com_11
+   \   000066   6E82         SUB.B   #0x4, R14
+   \   000068   2F24         JEQ     ??wifi_com_12
+   \   00006A   5E83         SUB.B   #0x1, R14
+   \   00006C   0B24         JEQ     ??wifi_com_13
+   \   00006E   5E83         SUB.B   #0x1, R14
+   \   000070   1624         JEQ     ??wifi_com_14
+   \   000072   5E83         SUB.B   #0x1, R14
+   \   000074   3724         JEQ     ??wifi_com_15
+   \   000076   7E800300     SUB.B   #0x3, R14
+   \   00007A   0B24         JEQ     ??wifi_com_16
+   \   00007C   7E800300     SUB.B   #0x3, R14
+   \   000080   4624         JEQ     ??wifi_com_17
+   \   000082   1001         RETA
+     26          					case 'R'://Reset
+     27          						pwm(OFF);
+   \                     ??wifi_com_13:
+   \   000084   3C401600     MOV.W   #0x16, R12
+   \   000088   ........     CALLA   #pwm
+     28          						operation_state = ONE;
+   \   00008C   9243....     MOV.W   #0x1, &operation_state
+     29          						break;
+   \   000090   1001         RETA
+     30          					case 'W'://Network Joined
+     31          						pwm(STRAIGHT);
+   \                     ??wifi_com_16:
+   \   000092   1C43         MOV.W   #0x1, R12
+   \   000094   ........     CALLA   #pwm
+     32          						operation_state = ONE;
+   \   000098   9243....     MOV.W   #0x1, &operation_state
+     33          						break;
+   \   00009C   1001         RETA
+     34          					case 'S':
+     35          						pwm(REVERSE);
+   \                     ??wifi_com_14:
+   \   00009E   3C400300     MOV.W   #0x3, R12
+   \   0000A2   ........     CALLA   #pwm
+     36          						operation_state = ONE;
+   \   0000A6   9243....     MOV.W   #0x1, &operation_state
+     37          						break;
+   \   0000AA   1001         RETA
+     38          					case 'D':
+     39          						pwm(CLOCKWISE);
+   \                     ??wifi_com_8:
+   \   0000AC   3C400500     MOV.W   #0x5, R12
+   \   0000B0   ........     CALLA   #pwm
+     40          						operation_state = ONE;
+   \   0000B4   9243....     MOV.W   #0x1, &operation_state
+     41          						break;
+   \   0000B8   1001         RETA
+     42          					case 'A':
+     43          						pwm(COUNTER_CLOCKWISE);
+   \                     ??wifi_com_7:
+   \   0000BA   3C400700     MOV.W   #0x7, R12
+   \   0000BE   ........     CALLA   #pwm
+     44          						operation_state = ONE;
+   \   0000C2   9243....     MOV.W   #0x1, &operation_state
+     45          						break;
+   \   0000C6   1001         RETA
+     46          					case 'Q':
+     47          						pwm(ARC_LEFT);
+   \                     ??wifi_com_12:
+   \   0000C8   3C401500     MOV.W   #0x15, R12
+   \   0000CC   ........     CALLA   #pwm
+     48          						operation_state = ONE;
+   \   0000D0   9243....     MOV.W   #0x1, &operation_state
+     49          						break;
+   \   0000D4   1001         RETA
+     50          					case 'E':
+     51          						pwm(ARC_RIGHT);
+   \                     ??wifi_com_9:
+   \   0000D6   3C401300     MOV.W   #0x13, R12
+   \   0000DA   ........     CALLA   #pwm
+     52          						operation_state = ONE;
+   \   0000DE   9243....     MOV.W   #0x1, &operation_state
+     53          						break;
+   \   0000E2   1001         RETA
+     54          					case 'T':
+     55          						operation_state = TWO;
+   \                     ??wifi_com_15:
+   \   0000E4   A243....     MOV.W   #0x2, &operation_state
+     56          						station++;
+   \   0000E8   9253....     ADD.W   #0x1, &station
+     57          						break;
+   \   0000EC   1001         RETA
+     58          					case 'G':
+     59          						if(timerB1_1 != HIGH){
+   \                     ??wifi_com_10:
+   \   0000EE   F2904800.... CMP.B   #0x48, &timerB1_1
+   \   0000F4   0624         JEQ     ??wifi_com_18
+     60          							start_timerB1_1(ONE);
+   \   0000F6   1C43         MOV.W   #0x1, R12
+   \   0000F8   ........     CALLA   #start_timerB1_1
+     61          							operation_state = TWO;
+   \   0000FC   A243....     MOV.W   #0x2, &operation_state
+   \   000100   1001         RETA
+     62          						}else{
+     63          							TB1CCTL1 &= ~CCIE;
+   \                     ??wifi_com_18:
+   \   000102   B2C01000C403 BIC.W   #0x10, &0x3c4
+     64          							operation_state = FOUR;
+   \   000108   A242....     MOV.W   #0x4, &operation_state
+     65          						}
+     66          						break;
+   \   00010C   1001         RETA
+     67          					case 'Z':
+     68          						operation = FIVE;
+   \                     ??wifi_com_17:
+   \   00010E   B2400500.... MOV.W   #0x5, &operation
+     69          						operation_state = ONE;
+   \   000114   9243....     MOV.W   #0x1, &operation_state
+     70          						break;
+   \   000118   1001         RETA
+     71          					case 'M':
+     72          						operation = FIVE;
+   \                     ??wifi_com_11:
+   \   00011A   B2400500.... MOV.W   #0x5, &operation
+     73          						operation_state = NINE;
+   \   000120   B2400900.... MOV.W   #0x9, &operation_state
+     74          						break;
+     75          					default: break;
+     76          				}
+     77          				/*
+     78          				switch(command[command_index+FIVE]){
+     79          					case '0':
+     80          						operation_state = ONE;
+     81          						break;
+     82          					case '1':
+     83          						if(timerB1_0 != HIGH){
+     84          							start_timerB1_0(FIVE);
+     85          						}
+     86          						operation_state = ONE;
+     87          						break;
+     88          					case '2':
+     89          						if(timerB1_0 != HIGH){
+     90          							start_timerB1_0(TEN);
+     91          						}
+     92          						operation_state = ONE;
+     93          						break;
+     94          					case '3':
+     95          						if(timerB1_0 != HIGH){
+     96          							start_timerB1_0(FIFTEEN);
+     97          						}
+     98          						operation_state = ONE;
+     99          						break;
+    100          					case '4':
+    101          						if(timerB1_0 != HIGH){
+    102          							start_timerB1_0(TWENTY);
+    103          						}
+    104          						operation_state = ONE;
+    105          						break;
+    106          					default: break;
+    107          				}*/
+    108          			}
+    109          			break;
+    110          
+    111          		default: break;
+    112          	}
+    113          }
+   \                     ??wifi_com_0:
+   \   000126   1001         RETA
+   \   000128                REQUIRE _A_TB1CCTL1_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   wifi_com
+        4   -> pwm
+        4   -> start_timerB1_1
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       2  _A_TB1CCTL1_L
+       2  station
+     296  wifi_com
+
+ 
+ 296 bytes in segment CODE
+   2 bytes in segment DATA16_AN
+   2 bytes in segment DATA16_Z
+ 
+ 296 bytes of CODE memory
+   2 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none
