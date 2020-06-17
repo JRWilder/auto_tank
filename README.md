@@ -33,13 +33,12 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 ## Drive Board
 <p align="center">
 	<img src="images/drive_board.png" width="500">
-	<img src="images/drive_board_under.png" width="500">
 	<img src="images/drive_assembly_part.png" width="2000">
 	<img src="images/drive_board_part.png" width="2000">
 	<img src="images/drive_board_draw.png" width="2000">
 </p>
 
-##IoT Board
+## IoT Board
 <p align="center">
 	<img src="images/IoT_board.png" width="500">
 	<img src="images/IoT_assembly_part.png" width="2000">
