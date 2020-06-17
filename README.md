@@ -4,6 +4,6 @@ What started out as a project from my Intro to Embedded Systems course at NC Sta
 The vehicle can follow a black line race track autonomously and can be remote-controlled via WiFi and smartphone app. The tank includes user interface features via an LCD screen and scroll menu with a potentiometer as a thumbwheel. The menu options include different forms of testing and calibrating options to prepare the car for WiFi operation and to follow a black line race track.
 
 ## Complete Vehicle
-<img src="images/complete.png">
-<img src="images/taken_apart.png">
-<img src="images/Documents.JPG">
+<img src="images/complete.png" width="500">
+<img src="images/taken_apart.png" width="500">
+<img src="images/Documents.JPG" width="500">
