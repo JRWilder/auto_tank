@@ -16,6 +16,7 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 <p align="center">
 	<img src="images/msp.png" width="500">
 	<img src="images/msp_under.png" width="500">
+	<img src="images/msp_assembly_part.png" width="2000">
 	<img src="images/msp_board_part.png" width="2000">
 	<img src="images/msp_board_draw.png" width="2000">
 </p>
