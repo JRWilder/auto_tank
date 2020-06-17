@@ -11,9 +11,9 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 
 ### SolidWorks
 <p align="center">
-	<img src="images/Documents.JPG">
+	<img src="images/main_assembly_part.JPG">
 </p>
-<img align="right" src="images/Main_assembly.png" width="2000">
+<img align="right" src="images/main_assembly_draw.png" width="2000">
 
 ## MSP430
 <p align="center">
@@ -22,7 +22,7 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 </p>
 
 ### SolidWorks
-<img src="images/FRAM_board.png" width="2000">
+<img src="images/msp_board_draw.png" width="2000">
 
 ## Power FRAM_board
 <p align="center">
@@ -31,4 +31,4 @@ The vehicle can follow a black line race track autonomously and can be remote-co
 </p>
 
 ### SoldiWorks
-<img src="images/Power_board_SW.png" width="2000">
+<img src="images/power_board_draw.png" width="2000">
